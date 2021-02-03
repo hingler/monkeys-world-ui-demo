@@ -4,7 +4,7 @@
 
 layout(location = 0) in mediump float height;
 
-layout(location = 0) uniform float height_factor;
+layout(location = 2) uniform float height_factor;
 
 layout(location = 0) out vec4 fragcolor;
 
