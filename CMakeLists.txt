@@ -5,7 +5,8 @@ include(CTest)
 enable_testing()
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world)
-add_executable(MonkeysWorldDemo main.cpp)
+add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
+                                    main.cpp)
 
 target_link_libraries(MonkeysWorldDemo PRIVATE MonkeysWorld::Engine)
 
