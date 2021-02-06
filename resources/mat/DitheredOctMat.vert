@@ -13,6 +13,6 @@ layout(location = 0) out mediump float height;
 
 void main() {
   vec4 pos = u_ViewProj * u_Model * position;
-  height = pos.y;
+  height = position.y;
   gl_Position = pos;
 }
