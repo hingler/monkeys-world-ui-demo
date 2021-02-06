@@ -27,6 +27,19 @@ class MovingCamera : public GameCamera {
     rot_x = 0;
     rot_y = 0;
 
+    ctx->GetEventManager()->RegisterKeyListener(GLFW_KEY_LEFT_ALT, [=](int a, int b, int c) {
+      auto cur = ctx->GetEventManager()->GetCursor();
+      if (b != GLFW_PRESS) {
+        return;
+      }
+
+      if (cur->IsCursorLocked()) {
+        cur->UnlockCursor();
+      } else {
+        cur->LockCursor();
+      }
+    });
+
     cursor_cache_ = GetContext()->GetEventManager()->GetCursor()->GetCursorPosition();
 
     auto click_lambda = [&, this](MouseEvent e) {
@@ -163,10 +176,11 @@ void SplashScreen::Initialize(Context* ctx) {
   game_root_ = std::make_shared<Empty>(ctx);
   auto tube = std::make_shared<OctTube>(ctx);
   game_root_->AddChild(tube);
-  game_root_->SetPosition(glm::vec3(0, 0, -8));
+  game_root_->SetPosition(glm::vec3(0, -4, -32));
   auto cam = std::make_shared<MovingCamera>(ctx);
   cam->SetPosition(glm::vec3(0, 0, 0));
-  cam->SetFov(25.0f);
+  cam->SetFov(45.0f);
+  cam->SetActive(true);
   game_root_->AddChild(cam);
 }
 

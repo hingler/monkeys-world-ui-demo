@@ -12,6 +12,8 @@ class OctTube : public ::monkeysworld::critter::Model {
  public:
   OctTube(::monkeysworld::engine::Context* ctx);
 
+  void Update() override;
+
   /**
    *  Sets the strength of the generated light.
    *  @param fac - the strength of the light emitted from the base of the tube.
@@ -20,6 +22,7 @@ class OctTube : public ::monkeysworld::critter::Model {
   void RenderMaterial(const ::monkeysworld::engine::RenderContext& rc) override;
  private:
   mat::DitheredOctMat tube_mat_;
+  float rot_;
 };
 }
 
