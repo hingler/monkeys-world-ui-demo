@@ -17,7 +17,7 @@ void OctTube::Update() {
 
 void OctTube::RenderMaterial(const RenderContext& rc) {
   PrepareAttributes();
-  tube_mat_.height_factor = 0.9f;
+  tube_mat_.height_factor = 1.6f;
   tube_mat_.view_mat = rc.GetActiveCamera().vp_matrix;
   tube_mat_.model_mat = GetTransformationMatrix();
   tube_mat_.UseMaterial();
