@@ -7,7 +7,10 @@ enable_testing()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world)
 add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/mat/DitheredOctMat.cpp
+                                    src/game/OctTube.cpp
                                     main.cpp)
+
+target_include_directories(MonkeysWorldDemo PRIVATE include/)
 
 target_link_libraries(MonkeysWorldDemo PRIVATE MonkeysWorld::Engine)
 
