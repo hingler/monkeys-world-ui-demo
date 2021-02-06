@@ -16,5 +16,5 @@ void main() {
   v_pos = u_Model * position;
   vec4 pos = u_ViewProj * v_pos;
   height = position.y;
-  gl_Position = vec4(floor(pos.xyz * 65.0) / 65.0, pos.w);
+  gl_Position = vec4(floor(pos.xy * 65.0) / 65.0, pos.zw);
 }

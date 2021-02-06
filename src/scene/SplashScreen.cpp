@@ -1,8 +1,11 @@
 #include <critter/Empty.hpp>
 #include <critter/GameCamera.hpp>
 
+#include <shader/light/SpotLight.hpp>
+
 #include <scene/SplashScreen.hpp>
 #include <game/OctTube.hpp>
+#include <game/Monkey.hpp>
 
 #include <glm/gtx/euler_angles.hpp>
 
@@ -15,6 +18,7 @@ using ::monkeysworld::critter::Empty;
 using ::monkeysworld::critter::GameCamera;
 using ::monkeysworld::engine::Context;
 using ::monkeysworld::input::MouseEvent;
+using ::monkeysworld::shader::light::SpotLight;
 using ::game::OctTube;
 
 class MovingCamera : public GameCamera {
@@ -176,9 +180,22 @@ void SplashScreen::Initialize(Context* ctx) {
   game_root_ = std::make_shared<Empty>(ctx);
   auto tube = std::make_shared<OctTube>(ctx);
   game_root_->AddChild(tube);
-  game_root_->SetPosition(glm::vec3(0, -4, -32));
+  game_root_->SetPosition(glm::vec3(0, 0, 0));
   auto cam = std::make_shared<MovingCamera>(ctx);
-  cam->SetPosition(glm::vec3(0, 0, 0));
+  auto moneky = std::make_shared<game::Monkey>(ctx);
+  auto lite = std::make_shared<SpotLight>(ctx);
+  lite->SetPosition(glm::vec3(0, -15, 0));
+  lite->SetColor(glm::vec3(1.0, 1.0, 1.0));
+  lite->SetDiffuseIntensity(1.0);
+  lite->SetSpecularIntensity(1.0);
+  lite->SetAttenuationConst(1.0f);
+  lite->SetAttenuationLinear(0.0f);
+  lite->SetAttenuationQuad(0.0f);
+  game_root_->AddChild(lite);
+  moneky->SetScale(glm::vec3(0.3f));
+  moneky->SetPosition(glm::vec3(0, 0.38, 0));
+  game_root_->AddChild(moneky);
+  cam->SetPosition(glm::vec3(0, 0, 8));
   cam->SetFov(45.0f);
   cam->SetActive(true);
   game_root_->AddChild(cam);

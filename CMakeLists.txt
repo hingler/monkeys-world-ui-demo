@@ -8,6 +8,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world)
 add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/mat/DitheredOctMat.cpp
                                     src/game/OctTube.cpp
+                                    src/game/Monkey.cpp
                                     main.cpp)
 
 target_include_directories(MonkeysWorldDemo PRIVATE include/)
@@ -17,6 +18,8 @@ target_link_libraries(MonkeysWorldDemo PRIVATE MonkeysWorld::Engine)
 add_custom_command(TARGET MonkeysWorldDemo POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources $<TARGET_FILE_DIR:MonkeysWorldDemo>/resources)
 
+add_custom_command(TARGET MonkeysWorldDemo POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world/resources $<TARGET_FILE_DIR:MonkeysWorldDemo>/resources)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
