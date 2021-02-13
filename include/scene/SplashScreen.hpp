@@ -2,6 +2,7 @@
 #define SPLASH_SCREEN_H_
 
 #include <engine/Scene.hpp>
+#include <file/CachedFileLoader.hpp>
 
 namespace scene {
 
@@ -14,6 +15,7 @@ class SplashScreen : public ::monkeysworld::engine::Scene {
  private:
   std::shared_ptr<::monkeysworld::critter::GameObject> game_root_;
   std::shared_ptr<::monkeysworld::critter::ui::UIObject> ui_root_;
+  std::shared_ptr<::monkeysworld::file::CachedFileLoader> file_loader_;
   
 };
 

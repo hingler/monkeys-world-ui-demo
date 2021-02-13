@@ -4,6 +4,7 @@
 #include <engine/Context.hpp>
 #include <shader/Material.hpp>
 #include <shader/ShaderProgram.hpp>
+#include <file/CachedFileLoader.hpp>
 #include <glm/glm.hpp>
 
 namespace mat {
@@ -12,7 +13,7 @@ namespace mat {
  *  Material used for our octagonal portal light
  */ 
 struct DitheredOctMat : public ::monkeysworld::shader::Material {
-  DitheredOctMat(::monkeysworld::engine::Context* ctx);
+  DitheredOctMat(std::shared_ptr<::monkeysworld::file::CachedFileLoader> loader);
   void UseMaterial() override;
   // model matrix
   glm::mat4 model_mat;

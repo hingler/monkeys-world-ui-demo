@@ -3,9 +3,10 @@
 namespace game {
 using ::monkeysworld::engine::Context;
 using ::monkeysworld::engine::RenderContext;
+using ::monkeysworld::file::CachedFileLoader;
 
-OctTube::OctTube(Context* ctx) : Model(ctx), tube_mat_(ctx) {
-  auto mesh = GetContext()->GetCachedFileLoader()->LoadModel("resources/octtube.obj");
+OctTube::OctTube(Context* ctx, std::shared_ptr<CachedFileLoader> loader) : Model(ctx), tube_mat_(loader) {
+  auto mesh = loader->LoadModel("resources/octtube.obj");
   SetMesh(mesh);
   rot_ = 0.0f;
 }

@@ -5,12 +5,14 @@
 
 #include <engine/Context.hpp>
 #include <critter/Model.hpp>
+#include <file/CachedFileLoader.hpp>
 
 namespace game {
 class OctTube : public ::monkeysworld::critter::Model {
 
  public:
-  OctTube(::monkeysworld::engine::Context* ctx);
+  OctTube(::monkeysworld::engine::Context* ctx,
+         std::shared_ptr<::monkeysworld::file::CachedFileLoader> loader);
 
   void Update() override;
 

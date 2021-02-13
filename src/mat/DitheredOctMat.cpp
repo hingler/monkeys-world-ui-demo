@@ -7,11 +7,11 @@ using namespace monkeysworld;
 
 using engine::Context;
 using shader::ShaderProgramBuilder;
+using file::CachedFileLoader;
 
 namespace mat {
 
-DitheredOctMat::DitheredOctMat(Context* ctx) : view_mat(1.0), model_mat(1.0), height_factor(1.0) {
-  auto loader = ctx->GetCachedFileLoader();
+DitheredOctMat::DitheredOctMat(std::shared_ptr<CachedFileLoader> loader) : view_mat(1.0), model_mat(1.0), height_factor(1.0) {
   prog_ = ShaderProgramBuilder(loader)
             .WithVertexShader("resources/mat/DitheredOctMat.vert")
             .WithFragmentShader("resources/mat/DitheredOctMat.frag")

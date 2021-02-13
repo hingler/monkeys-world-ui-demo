@@ -19,16 +19,20 @@ using ::monkeysworld::critter::GameCamera;
 using ::monkeysworld::engine::Context;
 using ::monkeysworld::input::MouseEvent;
 using ::monkeysworld::shader::light::SpotLight;
+using ::monkeysworld::file::CachedFileLoader;
 using ::game::OctTube;
 
-SplashScreen::SplashScreen() : game_root_(nullptr), ui_root_(nullptr) {}
+SplashScreen::SplashScreen() : game_root_(nullptr), ui_root_(nullptr) {
+  // TODO: propagate this file loader to other parts!
+  file_loader_ = std::make_shared<CachedFileLoader>("splash_screen");
+}
 
 void SplashScreen::Initialize(Context* ctx) {
   // im not going to fucking texture shit anyway lol
   game_root_ = std::make_shared<Empty>(ctx);
   game_root_->SetPosition(glm::vec3(0, 0, 0));
 
-  auto tube = std::make_shared<OctTube>(ctx);
+  auto tube = std::make_shared<OctTube>(ctx, file_loader_);
   game_root_->AddChild(tube);
 
   auto cam = std::make_shared<GameCamera>(ctx);
@@ -37,7 +41,7 @@ void SplashScreen::Initialize(Context* ctx) {
   cam->SetActive(true);
   game_root_->AddChild(cam);
 
-  auto moneky = std::make_shared<game::Monkey>(ctx);
+  auto moneky = std::make_shared<game::Monkey>(ctx, file_loader_);
   moneky->SetScale(glm::vec3(0.3f));
   moneky->SetPosition(glm::vec3(0, 0.38, 0));
   game_root_->AddChild(moneky);

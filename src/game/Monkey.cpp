@@ -3,8 +3,9 @@
 namespace game {
 using ::monkeysworld::engine::Context;
 using ::monkeysworld::engine::RenderContext;
-Monkey::Monkey(Context* ctx) : Model(ctx), mat_(ctx) {
-  auto model = GetContext()->GetCachedFileLoader()->LoadModel("resources/moneky.obj");
+using ::monkeysworld::file::CachedFileLoader;
+Monkey::Monkey(Context* ctx, std::shared_ptr<CachedFileLoader> loader) : Model(ctx), mat_(ctx) {
+  auto model = loader->LoadModel("resources/moneky.obj");
   SetMesh(model);
 }
 
