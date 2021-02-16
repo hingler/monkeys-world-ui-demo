@@ -19,7 +19,8 @@ HorizontalMenuGroup::HorizontalMenuGroup(Context* ctx, const std::vector<std::st
   for (auto item : text) {
     auto ui_text = std::make_shared<UITextObject>(ctx, font_path);
     ui_text->SetText(item);
-    ui_text->SetVerticalAlign(AlignmentV::MIDDLE);
+    // TODO: middle doesnt work as one would expect. figure that out at some point lol
+    ui_text->SetVerticalAlign(AlignmentV::TOP);
     ui_text->SetHorizontalAlign(AlignmentH::CENTER);
     ui_text->SetTextSize(16.0f);
     ui_text->SetTextColor(glm::vec4(1.0));
@@ -46,35 +47,38 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
   // only go through these steps if something has invalidated
   if (!IsValid()) {
     text_group_->SetDimensions(this->GetDimensions());
+    for (auto item : text_items_) {
+      auto min_dims = item->GetMinimumBoundingDims();
+      item->SetDimensions(min_dims);
+    }
+
     // record offset thus far.
     float offset_x = 0.0f;
     float rolling_offset = 0.0f;
     float t_offset = GetMenuOffset();
+
     for (int i = 0; i < text_items_.size(); i++) {
       auto item = text_items_[i];
-      auto min_dims = item->GetMinimumBoundingDims();
-      item->SetDimensions(glm::vec2(min_dims.x, this->GetDimensions().y));
-      item->SetPosition(glm::vec2(rolling_offset, 0.0f));
-      // called on range (0, <number of items>] -- any higher and we would access an invalid object
-      // we initialize rolling_offset to t = 0.0, in case that's the case
-      if (i < t_offset && t_offset <= i + 1) {
-        float low_o = rolling_offset;
-        rolling_offset += text_items_[i]->GetDimensions().x / 2
-                        + margin_
-                        + text_items_[i + 1]->GetDimensions().x / 2;
-        float high_o = rolling_offset;
-        float local_offset = t_offset - (i);
-        // correct for 0.0 assumption
-        offset_x = (low_o * (1 - local_offset)) + (high_o * local_offset);
-      } else if (i + 1 != text_items_.size()) {
-        rolling_offset += text_items_[i]->GetDimensions().x / 2
-                        + margin_
-                        + text_items_[i + 1]->GetDimensions().x / 2;
+      auto min_dims = item->GetDimensions();
+      item->SetPosition(glm::vec2(rolling_offset, GetDimensions().y / 2 - min_dims.y / 2));
+      if (i + 1 == text_items_.size()) {
+        break;
       }
+      
+      if (i < t_offset && t_offset <= i + 1) {
+        // here we interpolate between two values.
+        // rolling_offset is the start of text box i -- we're somewhere between i's center and i+1's center
+        float lo_offset = rolling_offset + item->GetDimensions().x / 2;
+        float hi_offset = lo_offset + item->GetDimensions().x / 2 + margin_ + text_items_[i + 1]->GetDimensions().x / 2;
+        float local_offset = t_offset - i;
+        offset_x = (lo_offset * (1 - local_offset)) + (hi_offset * local_offset);
+      }
+      
+      rolling_offset += text_items_[i]->GetDimensions().x + margin_;
     }
 
     // center items relative to the shit
-    offset_x += (text_items_[0]->GetDimensions().x / 2 - GetDimensions().x / 2);
+    offset_x -= GetDimensions().x / 2;
 
     for (auto i : text_items_) {
       auto dims_old  = i->GetPosition();
