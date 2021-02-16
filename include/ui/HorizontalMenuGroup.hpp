@@ -3,6 +3,7 @@
 
 #include <critter/ui/UIObject.hpp>
 #include <critter/ui/UIGroup.hpp>
+#include <font/UITextObject.hpp>
 
 #include <string>
 #include <vector>
@@ -18,18 +19,36 @@ class HorizontalMenuGroup : public ::monkeysworld::critter::ui::UIObject {
   /**
    *  @param ctx - context for this group.
    *  @param text - list of menu items which are displayed by this group.
+   *  @param font_path - path to the font we want to load.
    */ 
-  HorizontalMenuGroup(::monkeysworld::engine::Context* ctx, const std::vector<std::string>& text);
+  HorizontalMenuGroup(::monkeysworld::engine::Context* ctx, const std::vector<std::string>& text, const std::string& font_path);
+  
+  void RenderMaterial(const ::monkeysworld::engine::RenderContext& rc) override;
   void DrawUI(glm::vec2 minXY, glm::vec2 maxXY) override;
 
-  // sets/gets the menu offset -- whole numbers represent entries.
-  void SetMenuOffset(float offset);
-  float GetMenuOffset();
+  /**
+   *  Set the size of all menu elements.
+   *  @param size_pt - new size in pt.
+   */ 
+  void SetTextSize(float size_pt);
 
   /**
-   *  @returns the index of the currently visible menu item.
+   *  Sets the size of the margins in between elements.
+   *  @param size_px - new margin size in pixels
    */ 
-  int GetActiveMenuItem();
+  void SetMarginSize(float size_px);
+
+  /**
+   *  Sets the offset of our menu items. It is constrained to the range [0, <number of items>].
+   *  @param offset - the new menu offset. If a value is supplied outside the range of constraint,
+   *                  the offset is limited to the defined range.
+   */ 
+  void SetMenuOffset(float offset);
+
+  /**
+   *  @returns the current menu offset.
+   */ 
+  float GetMenuOffset();
 
   // uigroup will be written to once most likely, when we input the menu items
   // to draw: we'll just slide it back and forth
@@ -40,7 +59,10 @@ class HorizontalMenuGroup : public ::monkeysworld::critter::ui::UIObject {
   // it's not as isolated as i would like
  private:
   // contains the inside
-  ::monkeysworld::critter::ui::UIGroup text_group_;
+  std::shared_ptr<::monkeysworld::critter::ui::UIGroup> text_group_;
+  std::vector<std::shared_ptr<::monkeysworld::font::UITextObject>> text_items_;
+  float margin_;
+  float offset_;
 };
 
 }
