@@ -4,6 +4,7 @@
 #include <shader/light/SpotLight.hpp>
 
 #include <ui/HorizontalMenuGroup.hpp>
+#include <ui/LerpMenu.hpp>
 
 #include <scene/SplashScreen.hpp>
 #include <game/OctTube.hpp>
@@ -24,6 +25,7 @@ using ::monkeysworld::shader::light::SpotLight;
 using ::monkeysworld::file::CachedFileLoader;
 using ::game::OctTube;
 using ::ui::HorizontalMenuGroup;
+using ::ui::LerpMenu;
 
 SplashScreen::SplashScreen() : game_root_(nullptr), ui_root_(nullptr) {
   // TODO: propagate this file loader to other parts!
@@ -64,15 +66,20 @@ void SplashScreen::Initialize(Context* ctx) {
   game_root_->AddChild(lite);
 
   std::vector<std::string> test;
-  test.push_back("TEST ONE");
+  test.push_back("a");
   test.push_back("TEST TWO");
+  test.push_back("TEST THREE THOUSAND AND THIRTY");
+  test.push_back("TEST TWO");
+  test.push_back("TEST ONE");
   test.push_back("TEST THREE");
-  auto menu = std::make_shared<HorizontalMenuGroup>(ctx, test, "resources/BebasNeue-Regular.ttf");
-  ui_root_ = menu;
+  auto menu = std::make_shared<LerpMenu>(ctx, test, "resources/BebasNeue-Regular.ttf");
   menu->SetMarginSize(128.0f);
-  menu->SetTextSize(72.0f);
+  menu->SetTextSize(144.0f);
   menu->SetDimensions(glm::vec2(900, 150));
   menu->SetPosition(glm::vec2(150, 600));
+  BOOST_LOG_TRIVIAL(trace) << "adjust menu params";
+  menu->Invalidate();
+  ui_root_ = menu;
 }
 
 std::shared_ptr<::monkeysworld::critter::GameObject> SplashScreen::GetGameObjectRoot() {
