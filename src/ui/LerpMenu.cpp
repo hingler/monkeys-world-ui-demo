@@ -3,6 +3,7 @@
 namespace ui {
 
 using ::monkeysworld::engine::Context;
+using ::monkeysworld::audio::AudioFiletype;
 
 LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std::string& font_path)
   : HorizontalMenuGroup(ctx, text, font_path) {
@@ -10,15 +11,17 @@ LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std
 }
 
 void LerpMenu::Create() {
-  auto lambda_l = [&] (int, int, int) {
-    if (lerp_target_ > 0) {
+  auto lambda_l = [&] (int, int action, int) {
+    if (action == GLFW_PRESS && lerp_target_ > 0) {
       lerp_target_--;
+      GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
     }
   };
 
-  auto lambda_r = [&] (int, int, int) {
-    if (lerp_target_ < GetTextItems().size() - 1) {
+  auto lambda_r = [&] (int, int action, int) {
+    if (action == GLFW_PRESS && lerp_target_ < GetTextItems().size() - 1) {
       lerp_target_++;
+      GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
     }
   };
 
@@ -29,8 +32,17 @@ void LerpMenu::Create() {
 void LerpMenu::Update() {
   double delta = GetContext()->GetDeltaTime();
   float cur_offset = GetMenuOffset();
-  float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, delta));
-  SetMenuOffset((1 - t) * cur_offset + t * lerp_target_);
+  glm::ivec2 win_dims;
+  GetContext()->GetFramebufferSize(&win_dims.x, &win_dims.y);
+  glm::vec2 dims = GetDimensions();
+  SetPosition(glm::vec2(win_dims.x / 2 - dims.x / 2, win_dims.y - dims.y * 1.5));
+  if (std::abs(lerp_target_ - cur_offset) < LERP_EPS) {
+    SetMenuOffset(static_cast<float>(lerp_target_));
+  } else {
+    float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, delta));
+    SetMenuOffset((1 - t) * cur_offset + (t * lerp_target_));
+    Invalidate();
+  }
   
 }
 

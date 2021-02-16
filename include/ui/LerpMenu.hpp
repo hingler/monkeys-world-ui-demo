@@ -19,7 +19,8 @@ class LerpMenu : public HorizontalMenuGroup {
   int GetSelectedItem();
  private:
   // moves menu offset towards lerp target
-  const double SMOOTH_FACTOR = 0.1f;
+  const double SMOOTH_FACTOR = 0.01f;
+  const double LERP_EPS = 0.0001;
   void UpdateMenuOffset();
   int lerp_target_;
   ::monkeysworld::input::KeyListener listener_l_;
