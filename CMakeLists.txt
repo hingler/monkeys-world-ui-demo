@@ -8,6 +8,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world)
 add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/mat/DitheredOctMat.cpp
                                     src/game/OctTube.cpp
+                                    src/ui/HorizontalMenuGroup.cpp
                                     src/game/Monkey.cpp
                                     main.cpp)
 
