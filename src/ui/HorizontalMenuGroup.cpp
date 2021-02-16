@@ -115,4 +115,13 @@ float HorizontalMenuGroup::GetMenuOffset() {
   return offset_;
 }
 
+std::vector<std::shared_ptr<const UITextObject>> HorizontalMenuGroup::GetTextItems() {
+  std::vector<std::shared_ptr<const UITextObject>> res;
+  for (auto item : text_items_) {
+    res.push_back(std::const_pointer_cast<const UITextObject>(item));
+  }
+
+  return res;
+}
+
 }

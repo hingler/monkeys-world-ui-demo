@@ -50,6 +50,12 @@ class HorizontalMenuGroup : public ::monkeysworld::critter::ui::UIObject {
    */ 
   float GetMenuOffset();
 
+  /**
+   *  @returns a fresh list of const pointers which represent the text objects
+   *           stored in this menu group.
+   */ 
+  std::vector<std::shared_ptr<const ::monkeysworld::font::UITextObject>> GetTextItems();
+
   // uigroup will be written to once most likely, when we input the menu items
   // to draw: we'll just slide it back and forth
   // menugroup will need to take up the whole horizontal space as a result
