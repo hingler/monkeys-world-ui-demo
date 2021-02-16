@@ -15,13 +15,16 @@ HorizontalMenuGroup::HorizontalMenuGroup(Context* ctx, const std::vector<std::st
   text_group_->SetPosition(glm::vec2(0, 0));
   text_group_->SetDimensions(this->GetDimensions());
   offset_ = 0.0f;
+  margin_ = 64.0f;
   for (auto item : text) {
     auto ui_text = std::make_shared<UITextObject>(ctx, font_path);
     ui_text->SetText(item);
     ui_text->SetVerticalAlign(AlignmentV::MIDDLE);
     ui_text->SetHorizontalAlign(AlignmentH::CENTER);
     ui_text->SetTextSize(16.0f);
-    text_group_->AddChild(text_group_);
+    ui_text->SetTextColor(glm::vec4(1.0));
+    ui_text->SetDimensions(ui_text->GetMinimumBoundingDims());
+    text_group_->AddChild(ui_text);
     text_items_.push_back(ui_text);
   }
 }
@@ -60,9 +63,9 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
                         + margin_
                         + text_items_[i + 1]->GetDimensions().x / 2;
         float high_o = rolling_offset;
-        float local_offset = t_offset - (i - 1);
+        float local_offset = t_offset - (i);
         // correct for 0.0 assumption
-        offset_x = (low_o * (1 - local_offset)) + (high_o * local_offset) + text_items_[0]->GetDimensions().x / 2 - GetDimensions().x / 2;
+        offset_x = (low_o * (1 - local_offset)) + (high_o * local_offset);
       } else if (i + 1 != text_items_.size()) {
         rolling_offset += text_items_[i]->GetDimensions().x / 2
                         + margin_
@@ -70,10 +73,14 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
       }
     }
 
+    // center items relative to the shit
+    offset_x += (text_items_[0]->GetDimensions().x / 2 - GetDimensions().x / 2);
+
     for (auto i : text_items_) {
       auto dims_old  = i->GetPosition();
       dims_old.x -= offset_x;
       i->SetPosition(dims_old);
+      i->Invalidate();
     }
 
     // then, invalidate and draw the container.
@@ -87,8 +94,8 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
 void HorizontalMenuGroup::DrawUI(glm::vec2 minXY, glm::vec2 maxXY) {
   glBindFramebuffer(GL_READ_FRAMEBUFFER, text_group_->GetFramebuffer());
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GetFramebuffer());
-  auto dims = GetDimensions();
-  glBlitFramebuffer(0, 0, dims.x, dims.y, 0, 0, dims.x, dims.y, GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+  glm::ivec2 dims = static_cast<glm::ivec2>(GetDimensions());
+  glBlitFramebuffer(0, 0, dims.x, dims.y, 0, 0, dims.x, dims.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
   // restore old state
   // TODO: no fade -- add that later? :)
   glBindFramebuffer(GL_FRAMEBUFFER, GetFramebuffer());
