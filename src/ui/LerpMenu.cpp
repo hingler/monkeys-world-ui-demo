@@ -8,6 +8,7 @@ using ::monkeysworld::audio::AudioFiletype;
 LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std::string& font_path)
   : HorizontalMenuGroup(ctx, text, font_path) {
   lerp_target_ = 0;
+  SetMenuOffset(0.00001f);
 }
 
 void LerpMenu::Create() {
@@ -39,7 +40,7 @@ void LerpMenu::Update() {
   if (std::abs(lerp_target_ - cur_offset) < LERP_EPS) {
     SetMenuOffset(static_cast<float>(lerp_target_));
   } else {
-    float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, delta));
+    float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, delta * 1.6));
     SetMenuOffset((1 - t) * cur_offset + (t * lerp_target_));
     Invalidate();
   }

@@ -9,6 +9,7 @@ using ::monkeysworld::font::UITextObject;
 using ::monkeysworld::font::AlignmentH;
 using ::monkeysworld::font::AlignmentV;
 using ::monkeysworld::engine::RenderContext;
+using ::monkeysworld::shader::Canvas;
 HorizontalMenuGroup::HorizontalMenuGroup(Context* ctx, const std::vector<std::string>& text, const std::string& font_path) 
   : UIObject(ctx) {
   text_group_ = std::make_shared<UIGroup>(ctx);
@@ -79,12 +80,14 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
 
     // center items relative to the shit
     offset_x -= GetDimensions().x / 2;
+    if (t_offset == 0) {
+      offset_x += text_items_[0]->GetDimensions().x / 2;
+    }
 
     for (auto i : text_items_) {
       auto dims_old  = i->GetPosition();
       dims_old.x -= offset_x;
       i->SetPosition(dims_old);
-      i->Invalidate();
     }
 
     // then, invalidate and draw the container.
@@ -95,14 +98,34 @@ void HorizontalMenuGroup::RenderMaterial(const RenderContext& rc) {
   UIObject::RenderMaterial(rc);
 }
 
-void HorizontalMenuGroup::DrawUI(glm::vec2 minXY, glm::vec2 maxXY) {
+void HorizontalMenuGroup::DrawUI(glm::vec2 minXY, glm::vec2 maxXY, Canvas canvas) {
   glBindFramebuffer(GL_READ_FRAMEBUFFER, text_group_->GetFramebuffer());
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GetFramebuffer());
   glm::ivec2 dims = static_cast<glm::ivec2>(GetDimensions());
-  glBlitFramebuffer(0, 0, dims.x, dims.y, 0, 0, dims.x, dims.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  glBlitFramebuffer(0, 0, dims.x, dims.y, 0, 0, dims.x, dims.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
   // restore old state
   // TODO: no fade -- add that later? :)
   glBindFramebuffer(GL_FRAMEBUFFER, GetFramebuffer());
+  // i want to draw a line under the thing
+  // get round down and round up items
+  // calculate their widths
+  // draw line which is lerped to their widths
+  int offset_floor = static_cast<int>(std::floor(GetMenuOffset()));
+  int offset_ceil = static_cast<int>(std::ceil(GetMenuOffset()));
+  float offset_inner = GetMenuOffset() - offset_floor;
+  auto text_items = GetTextItems();
+  float width_floor = 0, width_ceil = 0;
+  if (offset_floor >= 0) {
+    width_floor = text_items[offset_floor]->GetMinimumBoundingDims().x;
+  }
+
+  if (offset_ceil < text_items.size()) {
+    width_ceil = text_items[offset_ceil]->GetMinimumBoundingDims().x;
+  }
+
+  float line_width = (width_floor * (1 - offset_inner)) + (width_ceil * (offset_inner));
+  float center_w = GetDimensions().x / 2;
+  canvas.DrawLine(glm::vec2(center_w - line_width / 2, 120), glm::vec2(center_w + line_width / 2, 120), 5, glm::vec4(1));
 }
 
 void HorizontalMenuGroup::SetMenuOffset(float offset) {

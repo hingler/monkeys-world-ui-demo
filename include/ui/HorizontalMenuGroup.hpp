@@ -24,7 +24,7 @@ class HorizontalMenuGroup : public ::monkeysworld::critter::ui::UIObject {
   HorizontalMenuGroup(::monkeysworld::engine::Context* ctx, const std::vector<std::string>& text, const std::string& font_path);
   
   void RenderMaterial(const ::monkeysworld::engine::RenderContext& rc) override;
-  void DrawUI(glm::vec2 minXY, glm::vec2 maxXY) override;
+  void DrawUI(glm::vec2 minXY, glm::vec2 maxXY, ::monkeysworld::shader::Canvas canvas) override;
 
   /**
    *  Set the size of all menu elements.
