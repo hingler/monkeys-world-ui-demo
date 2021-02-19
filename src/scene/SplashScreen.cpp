@@ -66,15 +66,17 @@ void SplashScreen::Initialize(Context* ctx) {
   game_root_->AddChild(lite);
 
   std::vector<std::string> test;
-  test.push_back("a");
-  test.push_back("TEST TWO");
-  test.push_back("TEST THREE THOUSAND AND THIRTY");
-  test.push_back("TEST TWO");
-  test.push_back("TEST ONE");
-  test.push_back("TEST THREE");
-  auto menu = std::make_shared<LerpMenu>(ctx, test, "resources/BebasNeue-Regular.ttf");
+  
+  test.push_back("START");
+  test.push_back("CONTINUE");
+  test.push_back("RESET");
+  test.push_back("OPTIONS");
+  test.push_back("CREDITS");
+  test.push_back("HELLO THERE :)");
+  auto menu = std::make_shared<LerpMenu>(ctx, test, "resources/Questrial-Regular.ttf");
   menu->SetMarginSize(128.0f);
-  menu->SetTextSize(144.0f);
+  menu->SetTextSize(96.0f);
+  menu->SetMenuOffset(0.0f);
   menu->SetDimensions(glm::vec2(900, 150));
   menu->SetPosition(glm::vec2(150, 600));
   BOOST_LOG_TRIVIAL(trace) << "adjust menu params";
