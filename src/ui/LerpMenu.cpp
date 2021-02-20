@@ -26,8 +26,20 @@ void LerpMenu::Create() {
     }
   };
 
+  auto lambda_enter = [&] (int, int action, int) {
+    if (action == GLFW_PRESS) {
+      // this is our target
+      auto event_mgr = GetContext()->GetEventManager();
+      event_mgr->RemoveKeyListener(listener_r_);
+      event_mgr->RemoveKeyListener(listener_l_);
+      event_mgr->RemoveKeyListener(listener_enter_);
+      GetContext()->GetAudioManager()->AddFileToBuffer("resources/click.ogg", AudioFiletype::OGG);
+    }
+  };
+
   listener_l_ = GetContext()->GetEventManager()->CreateKeyListener(GLFW_KEY_A, lambda_l);
   listener_r_ = GetContext()->GetEventManager()->CreateKeyListener(GLFW_KEY_D, lambda_r);
+  listener_enter_ = GetContext()->GetEventManager()->CreateKeyListener(GLFW_KEY_ENTER, lambda_enter);
 }
 
 void LerpMenu::Update() {

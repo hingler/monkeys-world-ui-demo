@@ -25,6 +25,7 @@ class LerpMenu : public HorizontalMenuGroup {
   int lerp_target_;
   ::monkeysworld::input::KeyListener listener_l_;
   ::monkeysworld::input::KeyListener listener_r_;
+  ::monkeysworld::input::KeyListener listener_enter_;
 
 };
 
