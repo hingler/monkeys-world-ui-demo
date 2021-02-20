@@ -9,6 +9,8 @@ LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std
   : HorizontalMenuGroup(ctx, text, font_path) {
   lerp_target_ = 0;
   SetMenuOffset(0.00001f);
+  confirmed_ = false;
+  confirmed_timer_ = 0.0;
 }
 
 void LerpMenu::Create() {
@@ -33,6 +35,7 @@ void LerpMenu::Create() {
       event_mgr->RemoveKeyListener(listener_r_);
       event_mgr->RemoveKeyListener(listener_l_);
       event_mgr->RemoveKeyListener(listener_enter_);
+      confirmed_ = true;
       GetContext()->GetAudioManager()->AddFileToBuffer("resources/click.ogg", AudioFiletype::OGG);
     }
   };
@@ -56,7 +59,19 @@ void LerpMenu::Update() {
     SetMenuOffset((1 - t) * cur_offset + (t * lerp_target_));
     Invalidate();
   }
-  
+
+  UpdateConfirmationOpacity();
+}
+
+void LerpMenu::UpdateConfirmationOpacity() {
+  if (confirmed_) {
+    if (confirmed_timer_ < CONFIRMED_DURATION) {
+      SetOpacity(static_cast<float>(sin(confirmed_timer_ * 128.0)));
+      confirmed_timer_ += GetContext()->GetDeltaTime();
+    } else {
+      SetOpacity(1.0f);
+    }
+  }
 }
 
 }

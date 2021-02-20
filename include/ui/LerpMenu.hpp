@@ -22,7 +22,14 @@ class LerpMenu : public HorizontalMenuGroup {
   const double SMOOTH_FACTOR = 0.0003;
   const double LERP_EPS = 0.0001;
   void UpdateMenuOffset();
+  void UpdateConfirmationOpacity();
   int lerp_target_;
+
+  bool confirmed_;
+  double confirmed_timer_;
+
+  const double CONFIRMED_DURATION = 0.4;
+
   ::monkeysworld::input::KeyListener listener_l_;
   ::monkeysworld::input::KeyListener listener_r_;
   ::monkeysworld::input::KeyListener listener_enter_;
