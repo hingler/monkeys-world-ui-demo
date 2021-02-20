@@ -1,5 +1,6 @@
 #include <critter/Empty.hpp>
 #include <critter/GameCamera.hpp>
+#include <critter/ui/FPSCounter.hpp>
 
 #include <shader/light/SpotLight.hpp>
 
@@ -23,6 +24,10 @@ using ::monkeysworld::engine::Context;
 using ::monkeysworld::input::MouseEvent;
 using ::monkeysworld::shader::light::SpotLight;
 using ::monkeysworld::file::CachedFileLoader;
+
+using ::monkeysworld::critter::ui::UIGroup;
+using ::monkeysworld::critter::ui::FPSCounter;
+
 using ::game::OctTube;
 using ::ui::HorizontalMenuGroup;
 using ::ui::LerpMenu;
@@ -66,7 +71,7 @@ void SplashScreen::Initialize(Context* ctx) {
   game_root_->AddChild(lite);
 
   std::vector<std::string> test;
-  
+
   test.push_back("START");
   test.push_back("CONTINUE");
   test.push_back("RESET");
@@ -81,7 +86,19 @@ void SplashScreen::Initialize(Context* ctx) {
   menu->SetPosition(glm::vec2(150, 600));
   BOOST_LOG_TRIVIAL(trace) << "adjust menu params";
   menu->Invalidate();
-  ui_root_ = menu;
+  std::shared_ptr<UIGroup> group = std::make_shared<UIGroup>(ctx);
+  group->SetDimensions(glm::vec2(1920, 1080));
+  group->SetPosition(glm::vec2(0));
+  group->AddChild(menu);
+
+  std::shared_ptr<FPSCounter> counter = std::make_shared<FPSCounter>(ctx, "resources/Questrial-Regular.ttf");
+  counter->SetTextSize(32.0f);
+  counter->SetDimensions(glm::vec2(300, 60));
+  counter->SetPosition(glm::vec2(5));
+  counter->SetTextColor(glm::vec4(1.0));
+
+  group->AddChild(counter);
+  ui_root_ = group;
 }
 
 std::shared_ptr<::monkeysworld::critter::GameObject> SplashScreen::GetGameObjectRoot() {
