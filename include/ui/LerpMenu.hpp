@@ -34,6 +34,8 @@ class LerpMenu : public HorizontalMenuGroup {
   ::monkeysworld::input::KeyListener listener_r_;
   ::monkeysworld::input::KeyListener listener_enter_;
 
+  int music_handle_;
+
 };
 
 }
