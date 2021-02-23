@@ -13,7 +13,7 @@ namespace mat {
  *  Material used for our octagonal portal light
  */ 
 struct DitheredOctMat : public ::monkeysworld::shader::Material {
-  DitheredOctMat(std::shared_ptr<::monkeysworld::file::CachedFileLoader> loader);
+  DitheredOctMat(::monkeysworld::engine::Context* ctx);
   void UseMaterial() override;
   // model matrix
   glm::mat4 model_mat;

@@ -6,11 +6,16 @@ namespace gamemenu {
 namespace mat {
 using ::monkeysworld::file::CachedFileLoader;
 using ::monkeysworld::shader::ShaderProgramBuilder;
-BlindsTransitionMat::BlindsTransitionMat(std::shared_ptr<CachedFileLoader> loader) {
-  prog_ = ShaderProgramBuilder()
-            .WithVertexShader("resources/mat/BlindsTransition.vert")
-            .WithFragmentShader("resources/mat/BlindsTransition.frag")
-            .Build();
+BlindsTransitionMat::BlindsTransitionMat(::monkeysworld::engine::Context* ctx) {
+  auto exec_prog = [&] {
+    prog_ = ShaderProgramBuilder()
+              .WithVertexShader("resources/mat/BlindsTransition.vert")
+              .WithFragmentShader("resources/mat/BlindsTransition.frag")
+              .Build();
+  };
+
+  auto f = ctx->GetExecutor()->ScheduleOnMainThread(exec_prog);
+  f.wait();
 
   segment_count = 5;
   segment_offset = 0.1f;

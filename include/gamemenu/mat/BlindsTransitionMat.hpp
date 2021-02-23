@@ -1,8 +1,9 @@
 #ifndef BLINDS_TRANSITION_MAT_H_
 #define BLINDS_TRANSITION_MAT_H_
 
-#include <shader/Material.hpp>
+#include <engine/Context.hpp>
 #include <file/CachedFileLoader.hpp>
+#include <shader/Material.hpp>
 #include <shader/ShaderProgram.hpp>
 
 #include <memory>
@@ -11,7 +12,7 @@ namespace gamemenu {
 namespace mat {
 
 struct BlindsTransitionMat : public ::monkeysworld::shader::Material {
-  BlindsTransitionMat(std::shared_ptr<::monkeysworld::file::CachedFileLoader> loader);
+  BlindsTransitionMat(::monkeysworld::engine::Context* ctx);
   void UseMaterial() override;
 
   int segment_count;
