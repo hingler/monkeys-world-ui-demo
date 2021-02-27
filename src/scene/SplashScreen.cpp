@@ -32,7 +32,7 @@ using ::game::OctTube;
 using ::ui::HorizontalMenuGroup;
 using ::ui::LerpMenu;
 
-SplashScreen::SplashScreen() : game_root_(nullptr), ui_root_(nullptr) {
+SplashScreen::SplashScreen() {
   // TODO: propagate this file loader to other parts!
   file_loader_ = std::make_shared<CachedFileLoader>("splash_screen");
 }
@@ -42,23 +42,23 @@ std::string SplashScreen::GetSceneIdentifier() {
 }
 
 void SplashScreen::Initialize(Context* ctx) {
+  // todo: i need to rewrite most of this
   // im not going to fucking texture shit anyway lol
-  game_root_ = std::make_shared<Empty>(ctx);
-  game_root_->SetPosition(glm::vec3(0, 0, 0));
+  GetGameObjectRoot()->SetPosition(glm::vec3(0, 0, 0));
 
   auto tube = std::make_shared<OctTube>(ctx, file_loader_);
-  game_root_->AddChild(tube);
+  GetGameObjectRoot()->AddChild(tube);
 
   auto cam = std::make_shared<GameCamera>(ctx);
   cam->SetPosition(glm::vec3(0, 0.7, 8));
   cam->SetFov(30.0f);
   cam->SetActive(true);
-  game_root_->AddChild(cam);
+  GetGameObjectRoot()->AddChild(cam);
 
   auto moneky = std::make_shared<game::Monkey>(ctx, file_loader_);
   moneky->SetScale(glm::vec3(0.3f));
   moneky->SetPosition(glm::vec3(0, 0.38, 0));
-  game_root_->AddChild(moneky);
+  GetGameObjectRoot()->AddChild(moneky);
 
   auto lite = std::make_shared<SpotLight>(ctx);
   lite->SetPosition(glm::vec3(0, -15, 0));
@@ -68,7 +68,7 @@ void SplashScreen::Initialize(Context* ctx) {
   lite->SetAttenuationConst(1.0f);
   lite->SetAttenuationLinear(0.0f);
   lite->SetAttenuationQuad(0.0f);
-  game_root_->AddChild(lite);
+  GetGameObjectRoot()->AddChild(lite);
 
   std::vector<std::string> test;
 
@@ -98,15 +98,7 @@ void SplashScreen::Initialize(Context* ctx) {
   counter->SetTextColor(glm::vec4(1.0));
 
   group->AddChild(counter);
-  ui_root_ = group;
-}
-
-std::shared_ptr<::monkeysworld::critter::GameObject> SplashScreen::GetGameObjectRoot() {
-  return game_root_;
-}
-
-std::shared_ptr<::monkeysworld::critter::ui::UIObject> SplashScreen::GetUIObjectRoot() {
-  return ui_root_;
+  GetWindow()->AddChild(group);
 }
 
 }
