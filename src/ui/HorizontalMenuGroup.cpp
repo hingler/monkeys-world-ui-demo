@@ -20,7 +20,6 @@ HorizontalMenuGroup::HorizontalMenuGroup(Context* ctx, const std::vector<std::st
   for (auto item : text) {
     auto ui_text = std::make_shared<UITextObject>(ctx, font_path);
     ui_text->SetText(item);
-    // TODO: middle doesnt work as one would expect. figure that out at some point lol
     ui_text->SetVerticalAlign(AlignmentV::TOP);
     ui_text->SetHorizontalAlign(AlignmentH::CENTER);
     ui_text->SetTextSize(16.0f);

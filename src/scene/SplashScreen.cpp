@@ -33,7 +33,6 @@ using ::ui::HorizontalMenuGroup;
 using ::ui::LerpMenu;
 
 SplashScreen::SplashScreen() {
-  // TODO: propagate this file loader to other parts!
   file_loader_ = std::make_shared<CachedFileLoader>("splash_screen");
 }
 
