@@ -13,6 +13,7 @@ add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/ui/LerpMenu.cpp
 
                                     src/gamemenu/mat/BlindsTransitionMat.cpp
+                                    src/gamemenu/ui/SlidingBlindsTransition.cpp
                                     src/gamemenu/GameMenu.cpp
                                     main.cpp)
 

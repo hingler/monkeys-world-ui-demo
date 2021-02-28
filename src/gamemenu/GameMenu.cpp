@@ -10,19 +10,22 @@ using ::monkeysworld::critter::ui::UIGroup;
 using ui::SlidingBlindsTransition;
 using ::monkeysworld::critter::ui::layout::Face;
 
-GameMenu::GameMenu() : initialized_(false) {
+GameMenu::GameMenu() {
 
 }
 
 void GameMenu::SetLastFrameTexture(GLuint color) {
-  if (initialized_.load()) {
-    // pass the color to the relevant component
-    return;
-  }
+}
+
+std::string GameMenu::GetSceneIdentifier() {
+  return "game_menu";
 }
 
 void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
+  BOOST_LOG_TRIVIAL(trace) << "test";
   auto transition_screen = std::make_shared<SlidingBlindsTransition>(ctx);
+  transition_screen->z_index = -10000;
+  
   auto margins = transition_screen->GetLayoutParams();
   auto win = GetWindow();
 

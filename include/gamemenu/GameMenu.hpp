@@ -20,10 +20,6 @@ class GameMenu : public ::monkeysworld::engine::Scene {
   void SetLastFrameTexture(GLuint color);
   void Initialize(::monkeysworld::engine::Context* ctx) override;
   std::string GetSceneIdentifier() override;
- private:
-  std::shared_ptr<::monkeysworld::critter::GameObject> game_root_;
-  std::shared_ptr<::monkeysworld::critter::ui::UIObject> ui_root_;
-  std::atomic_bool initialized_;    // true if the scene has been initialized (typically in another thread)
 };
 
 }

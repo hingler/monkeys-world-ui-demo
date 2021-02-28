@@ -1,4 +1,4 @@
-#include <mat/BlindsTransitionMat.hpp>
+#include <gamemenu/mat/BlindsTransitionMat.hpp>
 
 #include <shader/ShaderProgramBuilder.hpp>
 
@@ -28,7 +28,10 @@ void BlindsTransitionMat::UseMaterial() {
   glUniform1i(0, segment_count);
   glUniform1f(1, segment_offset);
   glUniform1f(2, time);
-  glUniform1i(3, texture);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glUniform1i(3, 0);
 }
 
 }

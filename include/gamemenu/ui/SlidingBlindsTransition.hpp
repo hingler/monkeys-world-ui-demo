@@ -3,6 +3,7 @@
 
 #include <engine/Context.hpp>
 #include <critter/ui/UIObject.hpp>
+#include <shader/Texture.hpp>
 
 #include <gamemenu/mat/BlindsTransitionMat.hpp>
 #include <glad/glad.h>
@@ -21,12 +22,23 @@ class SlidingBlindsTransition : public ::monkeysworld::critter::ui::UIObject {
   SlidingBlindsTransition(::monkeysworld::engine::Context* ctx);
 
   /**
-   *  Stores the texture which will be displayed before this transition begins. (A)
-   *  @param frame - a texture descriptor representing the initial image.
+   *  Override for Update.
    */ 
-  void SetTextureA(GLuint frame);
+  void Update() override;
+
+  /**
+   *  Override for DrawUI.
+   */ 
+  void DrawUI(glm::vec2 minXY, glm::vec2 maxXY, ::monkeysworld::shader::Canvas canvas);
+
+  /**
+   *  Stores the texture which will be displayed before this transition begins. (A)
+   *  @param t - a texture object representing the initial image.
+   */ 
+  void SetTextureA(std::shared_ptr<::monkeysworld::shader::Texture> t);
  private:
-  BlindsTransitionMat mat_;
+  mat::BlindsTransitionMat mat_;
+  std::shared_ptr<::monkeysworld::shader::Texture> tex_;
 };
 
 }
