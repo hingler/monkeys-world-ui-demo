@@ -15,7 +15,7 @@ LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std
 }
 
 void LerpMenu::Create() {
-  music_handle_ = GetContext()->GetAudioManager()->AddFileToBuffer("resources/morethanawoman.ogg", AudioFiletype::OGG);
+  // music_handle_ = GetContext()->GetAudioManager()->AddFileToBuffer("resources/morethanawoman.ogg", AudioFiletype::OGG);
   auto lambda_l = [&] (int, int action, int) {
     if (action == GLFW_PRESS && lerp_target_ > 0) {
       lerp_target_--;

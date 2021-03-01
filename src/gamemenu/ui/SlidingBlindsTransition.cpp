@@ -10,7 +10,7 @@ SlidingBlindsTransition::SlidingBlindsTransition(::monkeysworld::engine::Context
   : UIObject(ctx), mat_(ctx) {
   mat_.segment_count = 15;
   mat_.segment_offset = 0.06f;
-  mat_.time = 0.0f;
+  mat_.time = -0.3f;
 }
 
 

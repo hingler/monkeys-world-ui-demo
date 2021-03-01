@@ -3,12 +3,14 @@
 #include <gamemenu/ui/SlidingBlindsTransition.hpp>
 
 #include <critter/ui/layout/Margin.hpp>
+#include <critter/ui/UIImage.hpp>
 
 namespace gamemenu {
 
 using ::monkeysworld::critter::ui::UIGroup;
 using ui::SlidingBlindsTransition;
 using ::monkeysworld::critter::ui::layout::Face;
+using ::monkeysworld::critter::ui::UIImage;
 
 GameMenu::GameMenu() {
 
@@ -23,6 +25,9 @@ std::string GameMenu::GetSceneIdentifier() {
 
 void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto transition_screen = std::make_shared<SlidingBlindsTransition>(ctx);
+  auto bg = std::make_shared<UIImage>(ctx, "resources/unknown.png");
+  bg->z_index = 10;
+
   transition_screen->z_index = -10000;
   
   auto margins = transition_screen->GetLayoutParams();
@@ -45,7 +50,10 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   margins.top.dist = 0;
 
   transition_screen->SetLayoutParams(margins);
+  bg->SetLayoutParams(margins);
+
   win->AddChild(transition_screen);
+  win->AddChild(bg);
 }
 
 
