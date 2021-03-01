@@ -1,6 +1,7 @@
 #include <gamemenu/GameMenu.hpp>
 #include <critter/ui/UIGroup.hpp>
 #include <gamemenu/ui/SlidingBlindsTransition.hpp>
+#include <gamemenu/ui/MenuBG.hpp>
 
 #include <critter/ui/layout/Margin.hpp>
 #include <critter/ui/UIImage.hpp>
@@ -25,7 +26,7 @@ std::string GameMenu::GetSceneIdentifier() {
 
 void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto transition_screen = std::make_shared<SlidingBlindsTransition>(ctx);
-  auto bg = std::make_shared<UIImage>(ctx, "resources/unknown.png");
+  auto bg = std::make_shared<ui::MenuBG>(ctx);
   bg->z_index = 10;
 
   transition_screen->z_index = -10000;

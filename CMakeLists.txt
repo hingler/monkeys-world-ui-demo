@@ -11,10 +11,13 @@ add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/game/Monkey.cpp
                                     src/ui/HorizontalMenuGroup.cpp
                                     src/ui/LerpMenu.cpp
-
+                                    
                                     src/gamemenu/mat/BlindsTransitionMat.cpp
+                                    src/gamemenu/mat/MenuBGMat.cpp
                                     src/gamemenu/ui/SlidingBlindsTransition.cpp
+                                    src/gamemenu/ui/MenuBG.cpp
                                     src/gamemenu/GameMenu.cpp
+
                                     main.cpp)
 
 target_include_directories(MonkeysWorldDemo PRIVATE include/)
