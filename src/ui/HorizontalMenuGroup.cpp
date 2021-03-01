@@ -1,6 +1,8 @@
 #include <ui/HorizontalMenuGroup.hpp>
 #include <font/UITextObject.hpp>
 #include <font/TextFormat.hpp>
+#include <shader/Framebuffer.hpp>
+#include <shader/Texture.hpp>
 
 namespace ui {
 using ::monkeysworld::engine::Context;
@@ -9,7 +11,8 @@ using ::monkeysworld::font::UITextObject;
 using ::monkeysworld::font::AlignmentH;
 using ::monkeysworld::font::AlignmentV;
 using ::monkeysworld::engine::RenderContext;
-using ::monkeysworld::shader::Canvas;
+using namespace ::monkeysworld::shader;
+
 HorizontalMenuGroup::HorizontalMenuGroup(Context* ctx, const std::vector<std::string>& text, const std::string& font_path) 
   : UIObject(ctx) {
   text_group_ = std::make_shared<UIGroup>(ctx);
@@ -125,6 +128,24 @@ void HorizontalMenuGroup::DrawUI(glm::vec2 minXY, glm::vec2 maxXY, Canvas canvas
   float line_width = (width_floor * (1 - offset_inner)) + (width_ceil * (offset_inner));
   float center_w = GetDimensions().x / 2;
   canvas.DrawLine(glm::vec2(center_w - line_width / 2, 120), glm::vec2(center_w + line_width / 2, 120), 5, glm::vec4(1));
+  
+  
+  // this mess works -- but instead of having to do it every frame, we need to only do it once :)
+  // glm::ivec2 win;
+  // GetContext()->GetFramebufferSize(&win.x, &win.y);
+  // glBindTexture(GL_TEXTURE_2D, t->GetTextureDescriptor());
+
+  // auto fb = GetContext()->GetLastFrame();
+  // fb->BindFramebuffer(FramebufferTarget::DEFAULT);
+  // glReadBuffer(GL_COLOR_ATTACHMENT0);
+  // glCopyImageSubData(fb->GetColorAttachment(), GL_TEXTURE_2D, 0, 0, 0, 0, t->GetTextureDescriptor(), GL_TEXTURE_2D, 0, 0, 0, 0, win.x, win.y, 1);
+  // glBindFramebuffer(GL_FRAMEBUFFER, GetFramebuffer());
+  // auto mat = materials::TextureXferMaterial(GetContext());
+  // mat.SetOpacity(1.0);
+  // BOOST_LOG_TRIVIAL(trace) << "using./..";
+  // mat.SetTexture(t->GetTextureDescriptor());
+  // mat.UseMaterial();
+  // DrawFullscreenQuad();
 }
 
 void HorizontalMenuGroup::SetMenuOffset(float offset) {

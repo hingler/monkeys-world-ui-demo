@@ -21,6 +21,8 @@ class SlidingBlindsTransition : public ::monkeysworld::critter::ui::UIObject {
    */ 
   SlidingBlindsTransition(::monkeysworld::engine::Context* ctx);
 
+  void Create() override;
+
   /**
    *  Override for Update.
    */ 
@@ -30,12 +32,6 @@ class SlidingBlindsTransition : public ::monkeysworld::critter::ui::UIObject {
    *  Override for DrawUI.
    */ 
   void DrawUI(glm::vec2 minXY, glm::vec2 maxXY, ::monkeysworld::shader::Canvas canvas);
-
-  /**
-   *  Stores the texture which will be displayed before this transition begins. (A)
-   *  @param t - a texture object representing the initial image.
-   */ 
-  void SetTextureA(std::shared_ptr<::monkeysworld::shader::Texture> t);
  private:
   mat::BlindsTransitionMat mat_;
   std::shared_ptr<::monkeysworld::shader::Texture> tex_;

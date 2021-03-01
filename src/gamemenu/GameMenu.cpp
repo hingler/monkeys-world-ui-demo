@@ -22,7 +22,6 @@ std::string GameMenu::GetSceneIdentifier() {
 }
 
 void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
-  BOOST_LOG_TRIVIAL(trace) << "test";
   auto transition_screen = std::make_shared<SlidingBlindsTransition>(ctx);
   transition_screen->z_index = -10000;
   

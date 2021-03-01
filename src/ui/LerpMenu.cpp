@@ -11,11 +11,7 @@ LerpMenu::LerpMenu(Context* ctx, const std::vector<std::string>& text, const std
   SetMenuOffset(0.00001f);
   confirmed_ = false;
   confirmed_timer_ = 0.0;
-  // TODO: shortly before swapping scenes:
-  //  - bind GL_FRONT as the read buffer (https://www.khronos.org/opengl/wiki/Default_Framebuffer)
-  //  - copy its pixels to a new texture
-  //  - once that operation is complete, send that texture to the scene, which will associate it with our transition
-  //  - lastly: swap scenes.
+  swap_ = nullptr;
 }
 
 void LerpMenu::Create() {
@@ -68,6 +64,20 @@ void LerpMenu::Update() {
   }
 
   UpdateConfirmationOpacity();
+  UpdateSceneSwap();
+}
+
+void LerpMenu::UpdateSceneSwap() {
+  if (confirmed_) {
+    if (!swap_) {
+      swap_ = GetContext()->SwapScene(new gamemenu::GameMenu());
+    }
+
+    if (confirmed_timer_ >= (CONFIRMED_DURATION + 0.1)) {
+      BOOST_LOG_TRIVIAL(trace) << "preparing to swap...";
+      swap_->Swap();
+    }
+  }
 }
 
 void LerpMenu::UpdateConfirmationOpacity() {
@@ -76,6 +86,7 @@ void LerpMenu::UpdateConfirmationOpacity() {
       SetOpacity(static_cast<float>(sin(confirmed_timer_ * 128.0)));
       confirmed_timer_ += GetContext()->GetDeltaTime();
     } else {
+      confirmed_timer_ += GetContext()->GetDeltaTime();
       SetOpacity(1.0f);
     }
   }

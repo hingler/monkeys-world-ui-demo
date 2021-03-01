@@ -3,6 +3,8 @@
 
 #include <ui/HorizontalMenuGroup.hpp>
 #include <input/KeyListener.hpp>
+#include <engine/SceneSwap.hpp>
+#include <gamemenu/GameMenu.hpp>
 
 namespace ui {
 
@@ -23,10 +25,12 @@ class LerpMenu : public HorizontalMenuGroup {
   const double LERP_EPS = 0.0001;
   void UpdateMenuOffset();
   void UpdateConfirmationOpacity();
+  void UpdateSceneSwap();
   int lerp_target_;
 
   bool confirmed_;
   double confirmed_timer_;
+  std::shared_ptr<::monkeysworld::engine::SceneSwap> swap_;
 
   const double CONFIRMED_DURATION = 0.4;
 
