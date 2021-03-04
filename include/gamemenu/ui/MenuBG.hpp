@@ -4,6 +4,8 @@
 #include <critter/ui/UIObject.hpp>
 #include <gamemenu/mat/MenuBGMat.hpp>
 
+#include <shader/Texture.hpp>
+
 namespace gamemenu {
 namespace ui {
 
@@ -14,6 +16,8 @@ class MenuBG : public ::monkeysworld::critter::ui::UIObject {
    */ 
   MenuBG(::monkeysworld::engine::Context* ctx);
 
+  void Create() override;
+
   /**
    *  Update func.
    */ 
@@ -23,6 +27,8 @@ class MenuBG : public ::monkeysworld::critter::ui::UIObject {
 
  private:
   mat::MenuBGMat mat_;
+  std::shared_ptr<const ::monkeysworld::shader::Texture> tex_;
+
 };
 
 }
