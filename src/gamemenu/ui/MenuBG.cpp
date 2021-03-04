@@ -11,9 +11,7 @@ MenuBG::MenuBG(::monkeysworld::engine::Context* ctx) : UIObject(ctx), mat_(ctx) 
   mat_.noise_facs = 4.0f;
 }
 
-void MenuBG::Create() {
-  tex_ = GetContext()->GetCachedFileLoader()->LoadTexture("resources/unknown.png");
-}
+void MenuBG::Create() {}
 
 void MenuBG::Update() {
   mat_.time += static_cast<float>(GetContext()->GetDeltaTime());
@@ -23,7 +21,6 @@ void MenuBG::Update() {
 void MenuBG::DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Canvas canvas) {
   mat_.UseMaterial();
   DrawFullscreenQuad();
-  canvas.DrawImage(tex_, glm::vec2(0, 0), glm::vec2(128, 128));
 }
 
 }

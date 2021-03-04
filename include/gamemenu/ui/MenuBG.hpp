@@ -27,7 +27,6 @@ class MenuBG : public ::monkeysworld::critter::ui::UIObject {
 
  private:
   mat::MenuBGMat mat_;
-  std::shared_ptr<const ::monkeysworld::shader::Texture> tex_;
 
 };
 
