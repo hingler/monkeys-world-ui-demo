@@ -55,7 +55,6 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
 
   transition_screen->SetLayoutParams(margins);
   bg->SetLayoutParams(margins);
-  picks->SetLayoutParams(margins);
 
 
   win->AddChild(transition_screen);

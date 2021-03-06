@@ -2,6 +2,8 @@
 
 #include <critter/ui/UIImage.hpp>
 
+#include <engine/Scene.hpp>
+
 
 
 namespace gamemenu {
@@ -13,8 +15,9 @@ using ::monkeysworld::critter::ui::UIGroup;
 using namespace ::monkeysworld::critter::ui::layout;
 
 const float CourseSelectGroup::ASPECT_RATIO = 0.9f;
+const float CourseSelectGroup::TRANSITION_START = 2.5f;
 
-CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx) {
+CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
   group_ = std::make_shared<UIGroup>(ctx);
   std::shared_ptr<UIImage> image_b = std::make_shared<UIImage>(ctx, "resources/gamemenu/img/excursionB.png");
   auto margins = image_b->GetLayoutParams();
@@ -60,6 +63,25 @@ CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx) {
   group_->AddChild(image_a);
   group_->AddChild(image_b);
   group_->AddChild(image_c);
+
+  SetPosition(glm::vec2(0, 0));
+  SetDimensions(GetContext()->GetScene()->GetWindow()->GetDimensions());
+}
+
+void CourseSelectGroup::Update() {
+  local_delta_ += static_cast<float>(GetContext()->GetDeltaTime());
+  SetDimensions(GetContext()->GetScene()->GetWindow()->GetDimensions());
+  float fade = TransitionFunction(local_delta_);
+  SetPosition(glm::vec2(0, fade * GetDimensions().y * 1.5f));
+}
+
+float CourseSelectGroup::TransitionFunction(float t) {
+  float flip_t = 1 - std::max(t - TRANSITION_START, 0.0f);
+  if (flip_t < 0.0f) {
+    return 0.0;
+  } else {
+    return flip_t * flip_t * flip_t * flip_t;
+  }
 }
 
 void CourseSelectGroup::Layout(glm::vec2 size) {
@@ -72,7 +94,6 @@ void CourseSelectGroup::Layout(glm::vec2 size) {
     std::dynamic_pointer_cast<UIObject>(child)->SetDimensions(image_dims);
   }
 
-  BOOST_LOG_TRIVIAL(trace) << "hello";
   group_->SetDimensions(size);
   group_->PreLayout();
 }
