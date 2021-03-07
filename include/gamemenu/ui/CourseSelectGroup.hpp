@@ -16,6 +16,7 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
    */ 
   CourseSelectGroup(::monkeysworld::engine::Context* ctx);
 
+  void Create() override;
   void Update() override;
   void Layout(glm::vec2 size) override;
   bool OnClick(const ::monkeysworld::input::MouseEvent& e) override;

@@ -32,9 +32,14 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto transition_screen = std::make_shared<SlidingBlindsTransition>(ctx);
   auto bg = std::make_shared<ui::MenuBG>(ctx);
   auto picks = std::make_shared<CourseSelectGroup>(ctx);
+  auto banner = std::make_shared<StageBanner>(ctx);
+
+  banner->SetId(BANNER_ID);
+
   transition_screen->z_index = -10000;
   bg->z_index = 10;
   picks->z_index = 0;
+  banner->z_index = -100;
 
   auto margins = transition_screen->GetLayoutParams();
   auto win = GetWindow();
@@ -47,18 +52,19 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   margins.right.anchor_face = Face::RIGHT;
   margins.right.margin = 0;
 
+  margins.top.anchor_id = banner->GetId();
+  margins.top.anchor_face = Face::BOTTOM;
+  margins.top.margin = 0;
+  picks->SetLayoutParams(margins);
+
   margins.top.anchor_id = win->GetId();
   margins.top.anchor_face = Face::TOP;
-  margins.top.margin = 0;
 
-  auto banner = std::make_shared<StageBanner>(ctx);
   banner->SetLayoutParams(margins);
-  banner->z_index = -100;
 
   margins.bottom.anchor_id = win->GetId();
   margins.bottom.anchor_face = Face::BOTTOM;
   margins.bottom.margin = 0;
-
 
   transition_screen->SetLayoutParams(margins);
   bg->SetLayoutParams(margins);

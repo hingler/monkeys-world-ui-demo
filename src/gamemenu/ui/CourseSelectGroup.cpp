@@ -4,7 +4,7 @@
 
 #include <engine/Scene.hpp>
 
-
+#include <gamemenu/GameMenu.hpp>
 
 namespace gamemenu {
 namespace ui {
@@ -65,14 +65,31 @@ CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_
   group_->AddChild(image_c);
 
   SetPosition(glm::vec2(0, 0));
-  SetDimensions(GetContext()->GetScene()->GetWindow()->GetDimensions());
+}
+
+void CourseSelectGroup::Create() {
+  auto margins = GetLayoutParams();
+  margins.bottom.anchor_id = 0;
+  SetLayoutParams(margins);
+
+  auto banner = std::dynamic_pointer_cast<UIObject>(GetContext()->GetScene()->GetWindow()->GetChild(GameMenu::BANNER_ID));
+  auto win_dims = GetContext()->GetScene()->GetWindow()->GetDimensions();
+  SetDimensions(glm::vec2(win_dims.x, win_dims.y - banner->GetDimensions().y));
 }
 
 void CourseSelectGroup::Update() {
   local_delta_ += static_cast<float>(GetContext()->GetDeltaTime());
-  SetDimensions(GetContext()->GetScene()->GetWindow()->GetDimensions());
+
+  auto banner = std::dynamic_pointer_cast<UIObject>(GetContext()->GetScene()->GetWindow()->GetChild(GameMenu::BANNER_ID));
+  auto win_dims = GetContext()->GetScene()->GetWindow()->GetDimensions();
+  auto new_dims = glm::vec2(win_dims.x, win_dims.y - banner->GetDimensions().y);
+  SetDimensions(new_dims);
   float fade = TransitionFunction(local_delta_);
-  SetPosition(glm::vec2(0, fade * GetDimensions().y * 1.5f));
+
+  auto margins = GetLayoutParams();
+  margins.bottom.anchor_id = 0;
+  margins.top.margin = fade * GetDimensions().y * 1.5f;
+  SetLayoutParams(margins);
 }
 
 float CourseSelectGroup::TransitionFunction(float t) {

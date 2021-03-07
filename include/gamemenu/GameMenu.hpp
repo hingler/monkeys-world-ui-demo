@@ -20,6 +20,8 @@ class GameMenu : public ::monkeysworld::engine::Scene {
   void SetLastFrameTexture(GLuint color);
   void Initialize(::monkeysworld::engine::Context* ctx) override;
   std::string GetSceneIdentifier() override;
+
+  static const uint64_t BANNER_ID = 44100;
 };
 
 }
