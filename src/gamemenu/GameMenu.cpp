@@ -3,6 +3,7 @@
 #include <gamemenu/ui/SlidingBlindsTransition.hpp>
 #include <gamemenu/ui/MenuBG.hpp>
 #include <gamemenu/ui/CourseSelectGroup.hpp>
+#include <gamemenu/ui/StageBanner.hpp>
 
 #include <critter/ui/layout/Margin.hpp>
 #include <critter/ui/UIImage.hpp>
@@ -12,6 +13,7 @@ namespace gamemenu {
 using ::monkeysworld::critter::ui::UIGroup;
 using ui::SlidingBlindsTransition;
 using ui::CourseSelectGroup;
+using ui::StageBanner;
 using namespace ::monkeysworld::critter::ui::layout;
 using ::monkeysworld::critter::ui::UIImage;
 
@@ -45,13 +47,18 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   margins.right.anchor_face = Face::RIGHT;
   margins.right.margin = 0;
 
+  margins.top.anchor_id = win->GetId();
+  margins.top.anchor_face = Face::TOP;
+  margins.top.margin = 0;
+
+  auto banner = std::make_shared<StageBanner>(ctx);
+  banner->SetLayoutParams(margins);
+  banner->z_index = -100;
+
   margins.bottom.anchor_id = win->GetId();
   margins.bottom.anchor_face = Face::BOTTOM;
   margins.bottom.margin = 0;
 
-  margins.top.anchor_id = win->GetId();
-  margins.top.anchor_face = Face::TOP;
-  margins.top.margin = 0;
 
   transition_screen->SetLayoutParams(margins);
   bg->SetLayoutParams(margins);
@@ -60,6 +67,7 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   win->AddChild(transition_screen);
   win->AddChild(bg);
   win->AddChild(picks);
+  win->AddChild(banner);
 }
 
 
