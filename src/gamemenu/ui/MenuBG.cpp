@@ -1,7 +1,11 @@
 #include <gamemenu/ui/MenuBG.hpp>
 
+#include <audio/AudioManager.hpp>
+
 namespace gamemenu {
 namespace ui {
+
+using namespace ::monkeysworld::audio;
 
 MenuBG::MenuBG(::monkeysworld::engine::Context* ctx) : UIObject(ctx), mat_(ctx) {
   mat_.time = 0.0f;
@@ -11,7 +15,9 @@ MenuBG::MenuBG(::monkeysworld::engine::Context* ctx) : UIObject(ctx), mat_(ctx) 
   mat_.noise_facs = 4.0f;
 }
 
-void MenuBG::Create() {}
+void MenuBG::Create() {
+  GetContext()->GetAudioManager()->AddFileToBuffer("resources/halcyon.ogg", AudioFiletype::OGG);
+}
 
 void MenuBG::Update() {
   mat_.time += static_cast<float>(GetContext()->GetDeltaTime());
