@@ -34,12 +34,25 @@ StageBanner::StageBanner(::monkeysworld::engine::Context* ctx) : UIObject(ctx) {
   // group ought to maintain aspect ratio
 }
 
+void StageBanner::Create() {
+  transition_current_ = -1.0f;
+  transition_target_ = -1;
+  onscreen = false;
+  delta_local = 0.0f;
+}
+
 void StageBanner::Update() {
   float cur_offset = transition_current_;
   if (!(std::abs(cur_offset - transition_target_) < EPS)) {
     float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, GetContext()->GetDeltaTime()));
     transition_current_ = (1 - t) * cur_offset + (t * transition_target_);
     Invalidate();
+  }
+
+  delta_local += static_cast<float>(GetContext()->GetDeltaTime());
+  if (delta_local > 1.0f && !onscreen) {
+    onscreen = true;
+    Advance();
   }
 
   glm::vec2 dims_group = GetDimensions();
@@ -50,9 +63,6 @@ void StageBanner::Update() {
 
 void StageBanner::Layout(glm::vec2 size) {
   glm::vec2 dims_group = size;
-  BOOST_LOG_TRIVIAL(trace) << "dims: " << size.x << ", " << size.y;
-  BOOST_LOG_TRIVIAL(trace) << "dims: " << dims_group.x << ", " << dims_group.y;
-  BOOST_LOG_TRIVIAL(trace) << "position: " << GetPosition().x << ", " << GetPosition().y;
   dims_group.y = dims_group.x * (static_cast<float>(BANNER_HEIGHT) / BANNER_WIDTH);
   // ensure that group maintains aspect ratio
   group_->SetDimensions(dims_group);
@@ -62,11 +72,11 @@ void StageBanner::Layout(glm::vec2 size) {
     auto child = banners_[i];
     if (i == transition_target_) {
       // 0 if 1, offscreen if 0
-      float pos_y = 1.3f * (-dims_group.y * (t_fract));
+      float pos_y = 1.3f * (-dims_group.y * (1 - t_fract));
       child->SetPosition(glm::vec2(0, pos_y));
     } else if (i == transition_target_ - 1) {
       // 0 if 0, offscreen if 1
-      float pos_y = 1.3f * (-dims_group.y * (1 - t_fract));
+      float pos_y = 1.3f * (-dims_group.y * (t_fract));
       child->SetPosition(glm::vec2(0, pos_y));
     } else {
       // keep child out of visibility
@@ -74,9 +84,6 @@ void StageBanner::Layout(glm::vec2 size) {
     }
 
     child->SetDimensions(glm::vec2(dims_group.x, dims_group.y));
-
-    BOOST_LOG_TRIVIAL(trace) << "child " << i << ": " << child->GetPosition().x << ", " << child->GetPosition().y;
-    BOOST_LOG_TRIVIAL(trace) << "dims: " << child->GetDimensions().x << ", " << child->GetDimensions().y;
   }
 
   group_->PreLayout();
@@ -98,7 +105,6 @@ void StageBanner::DrawUI(glm::vec2 a, glm::vec2 b, ::monkeysworld::shader::Canva
   auto dims = static_cast<glm::ivec2>(GetDimensions());
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, GetFramebuffer());
   auto group_dims = static_cast<glm::ivec2>(group_->GetDimensions());
-  BOOST_LOG_TRIVIAL(trace) << group_dims.x << ", " << group_dims.y;
   glBlitFramebuffer(0, 0, group_dims.x, group_dims.y, 0, 0, dims.x, dims.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
   glBindFramebuffer(GL_FRAMEBUFFER, GetFramebuffer());
 }
