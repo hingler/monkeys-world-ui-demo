@@ -15,7 +15,7 @@ using ::monkeysworld::critter::ui::UIGroup;
 using namespace ::monkeysworld::critter::ui::layout;
 
 const float CourseSelectGroup::ASPECT_RATIO = 0.9f;
-const float CourseSelectGroup::TRANSITION_START = 2.5f;
+const float CourseSelectGroup::TRANSITION_START = 1.8f;
 
 CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
   group_ = std::make_shared<UIGroup>(ctx);
