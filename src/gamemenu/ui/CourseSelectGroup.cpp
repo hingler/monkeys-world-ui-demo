@@ -24,7 +24,7 @@ const float CourseSelectGroup::TRANSITION_START = 1.8f;
 const float CourseSelectGroup::TRANSITION_OUT_DURATION = 1.5f;
 
 const float CourseSelectGroup::EPS = 0.00001f;
-const float CourseSelectGroup::SMOOTH_FACTOR = 0.0005f;
+const float CourseSelectGroup::SMOOTH_FACTOR = 0.000005f;
 const float CourseSelectGroup::MARGIN_SIZE = 64.0f;
 
 CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
