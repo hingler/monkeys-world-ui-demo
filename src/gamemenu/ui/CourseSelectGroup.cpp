@@ -21,9 +21,11 @@ using ::monkeysworld::input::KeyListener;
 
 const float CourseSelectGroup::ASPECT_RATIO = 0.9f;
 const float CourseSelectGroup::TRANSITION_START = 1.8f;
+const float CourseSelectGroup::TRANSITION_OUT_DURATION = 1.5f;
 
 const float CourseSelectGroup::EPS = 0.00001f;
 const float CourseSelectGroup::SMOOTH_FACTOR = 0.0005f;
+const float CourseSelectGroup::MARGIN_SIZE = 64.0f;
 
 CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
   faded = false;
@@ -48,7 +50,7 @@ CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_
   margins.left.margin = 0.0f;
 
   margins.right.anchor_id = image_b->GetId();
-  margins.right.margin = 64.0f;
+  margins.right.margin = MARGIN_SIZE;
   margins.right.anchor_face = Face::LEFT;
 
   image_a->SetLayoutParams(margins);
@@ -58,7 +60,7 @@ CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_
 
   std::shared_ptr<UIImage> image_c = std::make_shared<UIImage>(ctx, "resources/gamemenu/img/excursionC.png");
   margins.left.anchor_id = image_b->GetId();
-  margins.left.margin = 64.0f;
+  margins.left.margin =MARGIN_SIZE;
   margins.left.anchor_face = Face::RIGHT;
 
   margins.right.anchor_id = 0;
@@ -146,7 +148,7 @@ float CourseSelectGroup::TransitionFunction(float t) {
 void CourseSelectGroup::Layout(glm::vec2 size) {
   // calculate size of each icon
   // min of (width / 3.2) and (height * 0.9).
-  int width = static_cast<int>(std::floor(std::min((size.x - 128) / 3.2, (size.y * ASPECT_RATIO) * 0.9)));
+  int width = static_cast<int>(std::floor(std::min((size.x - (2 * MARGIN_SIZE)) / 3.2, (size.y * ASPECT_RATIO) * 0.9)));
   int height = static_cast<int>(width / ASPECT_RATIO);
   glm::vec2 image_dims(width, height);
   for (auto child : group_->GetChildren()) {
@@ -185,6 +187,32 @@ void CourseSelectGroup::DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Can
   glm::vec2 selector_dims(SELECTOR_WIDTH * scale, SELECTOR_HEIGHT * scale);
   selector_dims *= ((1 + sin(local_delta_ * 4.0f)) / 35.0f) + 1.0f;
   canvas.DrawImage(selector_, static_cast<glm::vec2>(selector_pos_) - (selector_dims / 2.0f), selector_dims);
+}
+
+void CourseSelectGroup::HideElements(float time) {
+  if (time > TRANSITION_OUT_DURATION) {
+    // grab the center image and center it
+    auto img = images_[select_target_];
+    auto margins = img->GetLayoutParams();
+    margins.left.margin = margins.right.margin = MarginType::AUTO;
+    margins.left.anchor_id = margins.right.anchor_id = GetContext()->GetScene()->GetWindow()->GetId();
+    margins.left.anchor_face = Face::LEFT;
+    margins.right.anchor_face = Face::RIGHT;
+    // ignore for now
+
+  } else {
+    auto margin = images_[0]->GetLayoutParams();
+    margin.left.margin.dist = MARGIN_SIZE * (1 - std::min(static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8)), 1.0f));
+    margin = images_[2]->GetLayoutParams();
+    margin.right.margin.dist = MARGIN_SIZE * (1 - std::min(static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8)), 1.0f));
+    for (int i = 0; i < images_.size(); i++) {
+      if (i == select_target_) {
+        continue;
+      }
+
+      images_[i]->SetDimensions((1 - std::min(time / TRANSITION_OUT_DURATION, 1.0f)) * GetImageDims(GetDimensions()));
+    }
+  }
 }
 
 glm::vec2 CourseSelectGroup::GetSelectorCenter(float pos) {

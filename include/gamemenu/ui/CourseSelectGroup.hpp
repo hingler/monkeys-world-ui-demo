@@ -26,6 +26,12 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
   void RenderMaterial(const ::monkeysworld::engine::RenderContext& rc) override;
   void DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Canvas canvas) override;
 
+  /**
+   *  Handles the action of hiding the non-selected courses
+   *  @param time - time passed in transition.
+   */ 
+  void HideElements(float time);
+
  private:
   float TransitionFunction(float t);
   // positions the "active" cursor
@@ -53,6 +59,7 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
 
   static const float ASPECT_RATIO;
   static const float TRANSITION_START;
+  static const float TRANSITION_OUT_DURATION;
 
   static const int EXCURSION_HEIGHT = 810;
   static const int EXCURSION_WIDTH = 720;
@@ -60,8 +67,10 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
   static const int SELECTOR_HEIGHT = 900;
   static const int SELECTOR_WIDTH = 810;
 
+
   static const float EPS;
   static const float SMOOTH_FACTOR;
+  static const float MARGIN_SIZE;
 };
 
 }
