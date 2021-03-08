@@ -59,6 +59,9 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
 
   static const int SELECTOR_HEIGHT = 900;
   static const int SELECTOR_WIDTH = 810;
+
+  static const float EPS;
+  static const float SMOOTH_FACTOR;
 };
 
 }

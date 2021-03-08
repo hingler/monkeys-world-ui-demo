@@ -22,6 +22,9 @@ using ::monkeysworld::input::KeyListener;
 const float CourseSelectGroup::ASPECT_RATIO = 0.9f;
 const float CourseSelectGroup::TRANSITION_START = 1.8f;
 
+const float CourseSelectGroup::EPS = 0.00001f;
+const float CourseSelectGroup::SMOOTH_FACTOR = 0.0005f;
+
 CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
   faded = false;
   group_ = std::make_shared<UIGroup>(ctx);
@@ -102,8 +105,8 @@ void CourseSelectGroup::Update() {
   // update select
   // once this state is reached we're good
   
-  if (!(std::abs(select_current_ - select_target_) < 0.0001)) {
-    float t = static_cast<float>(1 - std::pow(0.00005, GetContext()->GetDeltaTime()));
+  if (!(std::abs(select_current_ - select_target_) < EPS)) {
+    float t = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, GetContext()->GetDeltaTime()));
     select_current_ = (1 - t) * select_current_ + (t * select_target_);
   }
 
