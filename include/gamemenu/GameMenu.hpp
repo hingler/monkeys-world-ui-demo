@@ -22,6 +22,9 @@ class GameMenu : public ::monkeysworld::engine::Scene {
   std::string GetSceneIdentifier() override;
 
   static const uint64_t BANNER_ID = 44100;
+  static const uint64_t SELECT_GROUP_ID = 44101;
+  static const uint64_t GRID_BG_ID = 44102;
+  static const uint64_t TRANSITION_ID = 44103;
 };
 
 }

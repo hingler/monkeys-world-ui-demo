@@ -34,6 +34,8 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto picks = std::make_shared<CourseSelectGroup>(ctx);
   auto banner = std::make_shared<StageBanner>(ctx);
 
+  bg->SetId(GRID_BG_ID);
+  picks->SetId(SELECT_GROUP_ID);
   banner->SetId(BANNER_ID);
 
   transition_screen->z_index = -10000;
