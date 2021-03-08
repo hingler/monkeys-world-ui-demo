@@ -2,6 +2,9 @@
 #define COURSE_SELECT_GROUP_H_
 
 #include <critter/ui/UIGroup.hpp>
+#include <critter/ui/UIImage.hpp>
+#include <shader/Texture.hpp>
+#include <input/KeyListener.hpp>
 
 namespace gamemenu {
 namespace ui {
@@ -25,11 +28,37 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
 
  private:
   float TransitionFunction(float t);
+  // positions the "active" cursor
+  glm::vec2 GetSelectorCenter(float pos);
+
+  // calculate dimensions of our input images
+  glm::vec2 GetImageDims(const glm::vec2& size);
   // nested group used to achieve behavior
   std::shared_ptr<::monkeysworld::critter::ui::UIGroup> group_;
+  std::vector<std::shared_ptr<::monkeysworld::critter::ui::UIImage>> images_;
+  std::shared_ptr<const ::monkeysworld::shader::Texture> selector_;
+
+  // stores selector center
+  glm::vec2 selector_pos_;
+
   float local_delta_;
+
+  bool faded;
+
+  float select_current_;
+  int select_target_;
+
+  ::monkeysworld::input::KeyListener key_l;
+  ::monkeysworld::input::KeyListener key_r;
+
   static const float ASPECT_RATIO;
   static const float TRANSITION_START;
+
+  static const int EXCURSION_HEIGHT = 810;
+  static const int EXCURSION_WIDTH = 720;
+
+  static const int SELECTOR_HEIGHT = 900;
+  static const int SELECTOR_WIDTH = 810;
 };
 
 }
