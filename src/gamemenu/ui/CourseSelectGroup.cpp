@@ -190,7 +190,7 @@ void CourseSelectGroup::DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Can
 }
 
 void CourseSelectGroup::HideElements(float time) {
-  if (time > TRANSITION_OUT_DURATION) {
+  if (time >= TRANSITION_OUT_DURATION) {
     // grab the center image and center it
     auto img = images_[select_target_];
     auto margins = img->GetLayoutParams();
@@ -201,16 +201,19 @@ void CourseSelectGroup::HideElements(float time) {
     // ignore for now
 
   } else {
+    float fade = static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8));
     auto margin = images_[0]->GetLayoutParams();
-    margin.left.margin.dist = MARGIN_SIZE * (1 - std::min(static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8)), 1.0f));
+    margin.left.margin.dist = MARGIN_SIZE * std::max(1 - fade, 0.0f);
+    images_[0]->SetLayoutParams(margin);
     margin = images_[2]->GetLayoutParams();
-    margin.right.margin.dist = MARGIN_SIZE * (1 - std::min(static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8)), 1.0f));
+    margin.right.margin.dist = MARGIN_SIZE * std::max(1 - fade, 0.0f);
+    images_[2]->SetLayoutParams(margin);
     for (int i = 0; i < images_.size(); i++) {
       if (i == select_target_) {
         continue;
       }
 
-      images_[i]->SetDimensions((1 - std::min(time / TRANSITION_OUT_DURATION, 1.0f)) * GetImageDims(GetDimensions()));
+      images_[i]->SetDimensions((std::max(1 - fade, 0.0f)) * GetImageDims(GetDimensions()));
     }
   }
 }
