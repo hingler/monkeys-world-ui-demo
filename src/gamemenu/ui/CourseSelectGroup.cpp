@@ -189,7 +189,7 @@ void CourseSelectGroup::DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Can
   canvas.DrawImage(selector_, static_cast<glm::vec2>(selector_pos_) - (selector_dims / 2.0f), selector_dims);
 }
 
-void CourseSelectGroup::HideElements(float time) {
+bool CourseSelectGroup::HideElements(float time) {
   if (time >= TRANSITION_OUT_DURATION) {
     // grab the center image and center it
     auto img = images_[select_target_];
@@ -198,6 +198,7 @@ void CourseSelectGroup::HideElements(float time) {
     margins.left.anchor_id = margins.right.anchor_id = GetContext()->GetScene()->GetWindow()->GetId();
     margins.left.anchor_face = Face::LEFT;
     margins.right.anchor_face = Face::RIGHT;
+    return true;
     // ignore for now
 
   } else {
@@ -215,6 +216,8 @@ void CourseSelectGroup::HideElements(float time) {
 
       images_[i]->SetDimensions((std::max(1 - fade, 0.0f)) * GetImageDims(GetDimensions()));
     }
+
+    return false;
   }
 }
 

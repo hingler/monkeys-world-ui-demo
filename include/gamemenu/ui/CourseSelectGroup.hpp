@@ -29,8 +29,9 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
   /**
    *  Handles the action of hiding the non-selected courses
    *  @param time - time passed in transition.
+   *  @returns true if the transition is complete, false otherwise.
    */ 
-  void HideElements(float time);
+  bool HideElements(float time);
 
  private:
   float TransitionFunction(float t);
