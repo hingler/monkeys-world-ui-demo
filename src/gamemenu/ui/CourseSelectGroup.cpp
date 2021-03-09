@@ -1,4 +1,5 @@
 #include <gamemenu/ui/CourseSelectGroup.hpp>
+#include <gamemenu/ui/StageSelectTransition.hpp>
 
 #include <critter/ui/UIImage.hpp>
 
@@ -29,6 +30,7 @@ const float CourseSelectGroup::MARGIN_SIZE = 64.0f;
 
 CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_(0.0f) {
   faded = false;
+  transition_begin_ = false;
   group_ = std::make_shared<UIGroup>(ctx);
   std::shared_ptr<UIImage> image_b = std::make_shared<UIImage>(ctx, "resources/gamemenu/img/excursionB.png");
   auto margins = image_b->GetLayoutParams();
@@ -114,17 +116,39 @@ void CourseSelectGroup::Update() {
 
   if (!faded && fade < 0.01) {
     faded = true;
-    key_l = GetContext()->GetEventManager()->CreateKeyListener(GLFW_KEY_A, [&] (int, int action, int) {
+    auto event_mgr = GetContext()->GetEventManager();
+    key_l_ = event_mgr->CreateKeyListener(GLFW_KEY_A, [&] (int, int action, int) {
       if (action == GLFW_PRESS) {
         select_target_ = std::max(select_target_ - 1, 0);
         GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
       }
     });
 
-    key_r = GetContext()->GetEventManager()->CreateKeyListener(GLFW_KEY_D, [&] (int, int action, int) {
+    key_r_ = event_mgr->CreateKeyListener(GLFW_KEY_D, [&] (int, int action, int) {
       if (action == GLFW_PRESS) {
         select_target_ = std::min(select_target_ + 1, static_cast<int>(images_.size()) - 1);
         GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
+      }
+    });
+
+    key_enter_ = event_mgr->CreateKeyListener(GLFW_KEY_ENTER, [&, event_mgr] (int, int action, int) {
+      if (action == GLFW_PRESS) {
+        event_mgr->RemoveKeyListener(key_l_);
+        event_mgr->RemoveKeyListener(key_r_);
+        event_mgr->RemoveKeyListener(key_enter_);
+        GetContext()->GetAudioManager()->AddFileToBuffer("resources/click.ogg", AudioFiletype::OGG);
+        // remove margins from selected image
+        for (auto& img : images_) {
+          auto margins = img->GetLayoutParams();
+          margins.left.anchor_id = margins.right.anchor_id = 0;
+          img->SetLayoutParams(margins);
+        }
+        
+        images_[select_target_]->z_index = -25;
+        auto transition = std::dynamic_pointer_cast<StageSelectTransition>(GetContext()->GetScene()->GetWindow()->GetChild(GameMenu::TRANSITION_ID));
+        target_offset_ = images_[select_target_]->GetPosition().x;
+        transition->StartTransition();
+        transition_begin_ = true;
       }
     });
   }
@@ -186,35 +210,42 @@ void CourseSelectGroup::DrawUI(glm::vec2, glm::vec2, ::monkeysworld::shader::Can
   float scale = (images_[0]->GetDimensions().x / EXCURSION_WIDTH);
   glm::vec2 selector_dims(SELECTOR_WIDTH * scale, SELECTOR_HEIGHT * scale);
   selector_dims *= ((1 + sin(local_delta_ * 4.0f)) / 35.0f) + 1.0f;
-  canvas.DrawImage(selector_, static_cast<glm::vec2>(selector_pos_) - (selector_dims / 2.0f), selector_dims);
+  if (!transition_begin_) {
+    canvas.DrawImage(selector_, static_cast<glm::vec2>(selector_pos_) - (selector_dims / 2.0f), selector_dims);
+  }
 }
 
 bool CourseSelectGroup::HideElements(float time) {
+  // lerp the image towards center
   if (time >= TRANSITION_OUT_DURATION) {
     // grab the center image and center it
     auto img = images_[select_target_];
     auto margins = img->GetLayoutParams();
     margins.left.margin = margins.right.margin = MarginType::AUTO;
-    margins.left.anchor_id = margins.right.anchor_id = GetContext()->GetScene()->GetWindow()->GetId();
+    margins.left.anchor_id = margins.right.anchor_id = group_->GetId();
     margins.left.anchor_face = Face::LEFT;
     margins.right.anchor_face = Face::RIGHT;
+    img->SetLayoutParams(margins);
+    Invalidate();
     return true;
     // ignore for now
 
   } else {
-    float fade = static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 2.8));
-    auto margin = images_[0]->GetLayoutParams();
-    margin.left.margin.dist = MARGIN_SIZE * std::max(1 - fade, 0.0f);
-    images_[0]->SetLayoutParams(margin);
-    margin = images_[2]->GetLayoutParams();
-    margin.right.margin.dist = MARGIN_SIZE * std::max(1 - fade, 0.0f);
-    images_[2]->SetLayoutParams(margin);
+    // improve this equation
+    float fade = static_cast<float>(std::pow(time / TRANSITION_OUT_DURATION, 0.06));
+    // remove the margins on the image, and lerp its offset from center
     for (int i = 0; i < images_.size(); i++) {
       if (i == select_target_) {
-        continue;
+        // do the lerp thing
+        glm::vec2 pos = images_[select_target_]->GetPosition();
+        glm::vec2 target = (GetDimensions() / 2.0f) - (images_[select_target_]->GetDimensions() / 2.0f);
+        float fade_pos = static_cast<float>(1 - std::pow(SMOOTH_FACTOR, GetContext()->GetDeltaTime()));
+        pos.x = target_offset_ = ((1 - fade_pos) * target_offset_) + ((fade_pos) * target.x);
+        images_[select_target_]->SetPosition(pos);
+      } else {
+        images_[i]->SetOpacity(1.0f - fade);
       }
 
-      images_[i]->SetDimensions((std::max(1 - fade, 0.0f)) * GetImageDims(GetDimensions()));
     }
 
     return false;

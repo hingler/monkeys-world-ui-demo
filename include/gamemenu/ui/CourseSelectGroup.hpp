@@ -51,12 +51,15 @@ class CourseSelectGroup : public ::monkeysworld::critter::ui::UIObject {
   float local_delta_;
 
   bool faded;
+  bool transition_begin_;
+  float target_offset_;
 
   float select_current_;
   int select_target_;
 
-  ::monkeysworld::input::KeyListener key_l;
-  ::monkeysworld::input::KeyListener key_r;
+  ::monkeysworld::input::KeyListener key_l_;
+  ::monkeysworld::input::KeyListener key_r_;
+  ::monkeysworld::input::KeyListener key_enter_;
 
   static const float ASPECT_RATIO;
   static const float TRANSITION_START;

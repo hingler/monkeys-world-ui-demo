@@ -4,6 +4,7 @@
 #include <gamemenu/ui/MenuBG.hpp>
 #include <gamemenu/ui/CourseSelectGroup.hpp>
 #include <gamemenu/ui/StageBanner.hpp>
+#include <gamemenu/ui/StageSelectTransition.hpp>
 
 #include <critter/ui/layout/Margin.hpp>
 #include <critter/ui/UIImage.hpp>
@@ -33,10 +34,12 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto bg = std::make_shared<ui::MenuBG>(ctx);
   auto picks = std::make_shared<CourseSelectGroup>(ctx);
   auto banner = std::make_shared<StageBanner>(ctx);
+  auto transition_obj = std::make_shared<ui::StageSelectTransition>(ctx);
 
   bg->SetId(GRID_BG_ID);
   picks->SetId(SELECT_GROUP_ID);
   banner->SetId(BANNER_ID);
+  transition_obj->SetId(TRANSITION_ID);
 
   transition_screen->z_index = -10000;
   bg->z_index = 10;
@@ -76,6 +79,7 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   win->AddChild(bg);
   win->AddChild(picks);
   win->AddChild(banner);
+  win->AddChild(transition_obj);
 }
 
 
