@@ -19,19 +19,20 @@ void LerpMenu::Create() {
   auto lambda_l = [&] (int, int action, int) {
     if (action == GLFW_PRESS && lerp_target_ > 0) {
       lerp_target_--;
-      GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
+      auto buffer = GetContext()->GetCachedFileLoader()->LoadAudio("resources/tick.ogg");
+      GetContext()->GetAudioManager()->AddBuffer(buffer);
     }
   };
 
   auto lambda_r = [&] (int, int action, int) {
     if (action == GLFW_PRESS && lerp_target_ < GetTextItems().size() - 1) {
       lerp_target_++;
-      GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
+      auto buffer = GetContext()->GetCachedFileLoader()->LoadAudio("resources/tick.ogg");
+      GetContext()->GetAudioManager()->AddBuffer(buffer);
     }
   };
 
   auto lambda_enter = [&] (int, int action, int) {
-    GetContext()->GetAudioManager()->RemoveFileFromBuffer(music_handle_);
     if (action == GLFW_PRESS) {
       // this is our target
       auto event_mgr = GetContext()->GetEventManager();
