@@ -16,11 +16,13 @@ MenuBG::MenuBG(::monkeysworld::engine::Context* ctx) : UIObject(ctx), mat_(ctx) 
 }
 
 void MenuBG::Create() {
-  GetContext()->GetAudioManager()->AddFileToBuffer("resources/halcyon.ogg", AudioFiletype::OGG);
+  audio_ = GetContext()->GetCachedFileLoader()->LoadAudio("resources/halcyon.ogg");
+  GetContext()->GetAudioManager()->AddBuffer(audio_);
 }
 
 void MenuBG::Update() {
   mat_.time += static_cast<float>(GetContext()->GetDeltaTime());
+  audio_->SetGain(4.0f * std::sin(mat_.time * 4.0f) - 4.0f);
   Invalidate();
 }
 

@@ -1,6 +1,7 @@
 #ifndef MENU_BG_H_
 #define MENU_BG_H_
 
+#include <audio/AudioBuffer.hpp>
 #include <critter/ui/UIObject.hpp>
 #include <gamemenu/mat/MenuBGMat.hpp>
 
@@ -27,6 +28,7 @@ class MenuBG : public ::monkeysworld::critter::ui::UIObject {
 
  private:
   mat::MenuBGMat mat_;
+  std::shared_ptr<::monkeysworld::audio::AudioBuffer> audio_;
 
 };
 
