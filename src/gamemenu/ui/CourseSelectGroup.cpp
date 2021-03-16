@@ -120,14 +120,14 @@ void CourseSelectGroup::Update() {
     key_l_ = event_mgr->CreateKeyListener(GLFW_KEY_A, [&] (int, int action, int) {
       if (action == GLFW_PRESS) {
         select_target_ = std::max(select_target_ - 1, 0);
-        GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
+        GetContext()->GetAudioManager()->AddFileToBuffer("resources/flap_jack_scream.ogg", AudioFiletype::OGG);
       }
     });
 
     key_r_ = event_mgr->CreateKeyListener(GLFW_KEY_D, [&] (int, int action, int) {
       if (action == GLFW_PRESS) {
         select_target_ = std::min(select_target_ + 1, static_cast<int>(images_.size()) - 1);
-        GetContext()->GetAudioManager()->AddFileToBuffer("resources/tick.ogg", AudioFiletype::OGG);
+        GetContext()->GetAudioManager()->AddFileToBuffer("resources/flap_jack_scream.ogg", AudioFiletype::OGG);
       }
     });
 
