@@ -19,6 +19,7 @@ add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/gamemenu/ui/CourseSelectGroup.cpp
                                     src/gamemenu/ui/StageBanner.cpp
                                     src/gamemenu/ui/StageSelectTransition.cpp
+                                    src/gamemenu/game/ContainerObject.cpp
                                     src/gamemenu/GameMenu.cpp
 
                                     main.cpp)

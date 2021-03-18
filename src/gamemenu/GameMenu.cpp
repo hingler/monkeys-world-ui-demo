@@ -6,17 +6,27 @@
 #include <gamemenu/ui/StageBanner.hpp>
 #include <gamemenu/ui/StageSelectTransition.hpp>
 
+#include <gamemenu/game/ContainerObject.hpp>
+
+#include <shader/light/SpotLight.hpp>
+
 #include <critter/ui/layout/Margin.hpp>
 #include <critter/ui/UIImage.hpp>
+#include <critter/GameCamera.hpp>
 
 namespace gamemenu {
 
+using ::monkeysworld::shader::light::SpotLight;
 using ::monkeysworld::critter::ui::UIGroup;
 using ui::SlidingBlindsTransition;
 using ui::CourseSelectGroup;
 using ui::StageBanner;
 using namespace ::monkeysworld::critter::ui::layout;
 using ::monkeysworld::critter::ui::UIImage;
+
+using ::monkeysworld::critter::GameCamera;
+
+using game::ContainerObject;
 
 GameMenu::GameMenu() {
 
@@ -80,6 +90,30 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   win->AddChild(picks);
   win->AddChild(banner);
   win->AddChild(transition_obj);
+
+  auto container = std::make_shared<ContainerObject>(ctx);
+  container->SetPosition(glm::vec3(0, 0, -8));
+  container->SetScale(glm::vec3(0.3, 1.0, 1.0));
+  container->SetRotation(glm::vec3(0, -1.5706, 0));
+  GetGameObjectRoot()->AddChild(container);
+
+  auto cam = std::make_shared<GameCamera>(ctx);
+  cam->SetPosition(glm::vec3(0, 0, 0));
+  cam->SetRotation(glm::vec3(0, 0, 0));
+  cam->SetFov(30.0f);
+  cam->SetActive(true);
+  GetGameObjectRoot()->AddChild(cam);
+  
+  auto lite = std::make_shared<SpotLight>(ctx);
+  lite->SetPosition(glm::vec3(0, -12, 0));
+  lite->SetColor(glm::vec3(1.0, 1.0, 1.0));
+  lite->SetDiffuseIntensity(1.0);
+  lite->SetSpecularIntensity(1.0);
+  lite->SetAttenuationConst(1.0f);
+  lite->SetAttenuationLinear(0.0f);
+  lite->SetAttenuationQuad(0.0f);
+  GetGameObjectRoot()->AddChild(lite);
+
 }
 
 
