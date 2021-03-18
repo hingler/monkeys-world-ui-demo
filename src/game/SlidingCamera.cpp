@@ -16,7 +16,7 @@ void SlidingCamera::SetStartPosition(glm::vec3 pos) {
   start_point_ = pos;
 }
 
-void SlidingCamera::SetEndPosition(glm::vec3 rot) {
+void SlidingCamera::SetStartRotation(glm::vec3 rot) {
   start_rotation_ = rot;
 }
 
