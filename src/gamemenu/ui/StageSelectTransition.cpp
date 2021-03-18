@@ -14,6 +14,7 @@ StageSelectTransition::StageSelectTransition(Context* ctx) : UIObject(ctx) {
   local_delta_ = false;
   banner_swapped_ = false;
   camera_started_ = false;
+  camera_second_stage_start_ = false;
 }
 
 void StageSelectTransition::Create() {
@@ -35,11 +36,20 @@ void StageSelectTransition::Update() {
     if (!camera_started_ && local_delta_ > 0.3f) {
       cam_->StartAnimation();
       camera_started_ = true;
-    } else if (camera_started_) {
+    } else if (camera_started_ && !camera_second_stage_start_) {
       // start moving the select group off the screen
       glm::vec2 win_dims = GetContext()->GetFramebufferSize();
       stage_select_->SetPosition(glm::vec2(cam_->Fade() * -(win_dims.x * 1.5), stage_select_->GetPosition().y));
       // once fade = 1.0, reset start/end and restart
+      if (cam_->Fade() >= 1.0f) {
+        camera_second_stage_start_ = true;
+        cam_->SetStartPosition(glm::vec3(0));
+        cam_->SetStartRotation(glm::vec3(0));
+        cam_->SetEndPosition(glm::vec3(0, 0, -4.6));
+        cam_->SetEndRotation(glm::vec3(0));
+        cam_->SetSlideDuration(1.2f);
+        cam_->StartAnimation();
+      }
     }
 
     if (stage_select_->HideElements(local_delta_) && !banner_swapped_) {

@@ -95,8 +95,8 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   win->AddChild(transition_obj);
 
   auto container = std::make_shared<ContainerObject>(ctx);
-  container->SetPosition(glm::vec3(0, -0.3, -9.6));
-  container->SetScale(glm::vec3(0.22, 1.0, 1.0));
+  container->SetPosition(glm::vec3(0, -0.3, -11.2));
+  container->SetScale(glm::vec3(0.45, 1.0, 1.0));
   container->SetRotation(glm::vec3(0, -1.5706, 0));
   GetGameObjectRoot()->AddChild(container);
 

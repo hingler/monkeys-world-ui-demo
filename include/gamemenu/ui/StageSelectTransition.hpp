@@ -30,6 +30,7 @@ class StageSelectTransition : public ::monkeysworld::critter::ui::UIObject {
 
   bool banner_swapped_;
   bool camera_started_;
+  bool camera_second_stage_start_;
   
   std::shared_ptr<CourseSelectGroup> stage_select_;
   std::shared_ptr<StageBanner> banner_;
