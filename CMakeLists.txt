@@ -9,6 +9,7 @@ add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/mat/DitheredOctMat.cpp
                                     src/game/OctTube.cpp
                                     src/game/Monkey.cpp
+                                    src/game/SlidingCamera.cpp
                                     src/ui/HorizontalMenuGroup.cpp
                                     src/ui/LerpMenu.cpp
                                     
