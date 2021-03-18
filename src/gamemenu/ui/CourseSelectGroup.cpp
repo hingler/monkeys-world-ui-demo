@@ -62,7 +62,7 @@ CourseSelectGroup::CourseSelectGroup(Context* ctx) : UIObject(ctx), local_delta_
 
   std::shared_ptr<UIImage> image_c = std::make_shared<UIImage>(ctx, "resources/gamemenu/img/excursionC.png");
   margins.left.anchor_id = image_b->GetId();
-  margins.left.margin =MARGIN_SIZE;
+  margins.left.margin = MARGIN_SIZE;
   margins.left.anchor_face = Face::RIGHT;
 
   margins.right.anchor_id = 0;

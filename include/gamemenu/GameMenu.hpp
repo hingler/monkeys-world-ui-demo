@@ -25,6 +25,8 @@ class GameMenu : public ::monkeysworld::engine::Scene {
   static const uint64_t SELECT_GROUP_ID = 44101;
   static const uint64_t GRID_BG_ID = 44102;
   static const uint64_t TRANSITION_ID = 44103;
+  
+  static const uint64_t CAMERA_ID = 48000;
 };
 
 }

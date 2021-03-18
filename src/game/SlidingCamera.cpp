@@ -43,14 +43,15 @@ void SlidingCamera::StopAnimation() {
 
 void SlidingCamera::Update() {
   if (animating_) {
-    float f = fade();
-    SetPosition(glm::mix(start_point_, end_point_, f));
-    SetRotation(glm::mix(start_rotation_, end_rotation_, f));
     time_ += static_cast<float>(GetContext()->GetDeltaTime());
   }
+  
+  float f = Fade();
+  SetPosition(glm::mix(start_point_, end_point_, f));
+  SetRotation(glm::mix(start_rotation_, end_rotation_, f));
 }
 
-float SlidingCamera::fade() {
+float SlidingCamera::Fade() {
   float t = time_ / slide_dur_;
   t = std::max(std::min(1.0f, t), 0.0f);
   // 10t^{3} - 15t^{4} + 6t^{5} -- from perlin noise impl :)

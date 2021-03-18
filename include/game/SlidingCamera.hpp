@@ -29,11 +29,12 @@ class SlidingCamera : public ::monkeysworld::critter::GameCamera {
 
   // updates position of camera
   void Update() override;
- private:
+
   /**
    *  @returns [0 - 1] representing the mix var between start and end.
    */ 
-  float fade();
+  float Fade();
+ private:
 
   // start coordinates
   glm::vec3 start_point_;

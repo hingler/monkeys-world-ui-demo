@@ -8,6 +8,8 @@
 
 #include <gamemenu/game/ContainerObject.hpp>
 
+#include <game/SlidingCamera.hpp>
+
 #include <shader/light/SpotLight.hpp>
 
 #include <critter/ui/layout/Margin.hpp>
@@ -59,6 +61,12 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto margins = transition_screen->GetLayoutParams();
   auto win = GetWindow();
 
+
+  margins.top.anchor_id = banner->GetId();
+  margins.top.anchor_face = Face::BOTTOM;
+  margins.top.margin = 0;
+  picks->SetLayoutParams(margins);
+
   margins.left.anchor_id = win->GetId();
   margins.left.anchor_face = Face::LEFT;
   margins.left.margin = 0;
@@ -66,11 +74,6 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   margins.right.anchor_id = win->GetId();
   margins.right.anchor_face = Face::RIGHT;
   margins.right.margin = 0;
-
-  margins.top.anchor_id = banner->GetId();
-  margins.top.anchor_face = Face::BOTTOM;
-  margins.top.margin = 0;
-  picks->SetLayoutParams(margins);
 
   margins.top.anchor_id = win->GetId();
   margins.top.anchor_face = Face::TOP;
@@ -97,12 +100,17 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   container->SetRotation(glm::vec3(0, -1.5706, 0));
   GetGameObjectRoot()->AddChild(container);
 
-  auto cam = std::make_shared<GameCamera>(ctx);
-  cam->SetPosition(glm::vec3(0, 0, 0));
-  cam->SetRotation(glm::vec3(0, 0, 0));
-  cam->SetFov(30.0f);
-  cam->SetActive(true);
-  GetGameObjectRoot()->AddChild(cam);
+  auto sliding_cam = std::make_shared<::game::SlidingCamera>(ctx);
+  sliding_cam->SetId(CAMERA_ID);
+
+  sliding_cam->SetStartPosition(glm::vec3(-15, 0, 0));
+  sliding_cam->SetStartRotation(glm::vec3(0, -0.92, 0));
+  sliding_cam->SetEndPosition(glm::vec3(0));
+  sliding_cam->SetEndRotation(glm::vec3(0));
+  sliding_cam->SetSlideDuration(2.5f);
+  sliding_cam->SetFov(36.0f);
+  sliding_cam->SetActive(true);
+  GetGameObjectRoot()->AddChild(sliding_cam);
   
   auto lite = std::make_shared<SpotLight>(ctx);
   lite->SetPosition(glm::vec3(0, -12, 0));

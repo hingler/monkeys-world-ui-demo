@@ -2,6 +2,7 @@
 #define STAGE_SELECT_TRANSITION_H_
 
 #include <critter/ui/UIObject.hpp>
+#include <game/SlidingCamera.hpp>
 
 #include <gamemenu/ui/CourseSelectGroup.hpp>
 #include <gamemenu/ui/StageBanner.hpp>
@@ -28,10 +29,13 @@ class StageSelectTransition : public ::monkeysworld::critter::ui::UIObject {
   float local_delta_;
 
   bool banner_swapped_;
+  bool camera_started_;
   
   std::shared_ptr<CourseSelectGroup> stage_select_;
   std::shared_ptr<StageBanner> banner_;
   std::shared_ptr<::monkeysworld::critter::ui::UIObject> bg_;
+
+  std::shared_ptr<::game::SlidingCamera> cam_;
   
 };
 
