@@ -9,6 +9,7 @@
 #include <gamemenu/game/ContainerObject.hpp>
 
 #include <game/SlidingCamera.hpp>
+#include <game/StrokeModel.hpp>
 
 #include <shader/light/SpotLight.hpp>
 
@@ -121,6 +122,19 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   lite->SetAttenuationLinear(0.0f);
   lite->SetAttenuationQuad(0.0f);
   GetGameObjectRoot()->AddChild(lite);
+
+  auto koala = std::make_shared<::game::StrokeModel>(ctx);
+  auto model = ctx->GetCachedFileLoader()->LoadModel("resources/gamemenu/koala.obj");
+  koala->SetStrokeModel(model);
+  koala->SetPrimaryModel(model);
+  koala->SetStrokeWidth(1.3f);
+  koala->SetColor(glm::vec4(0.0, 0.0, 0.0, 1.0));
+
+  koala->SetPosition(glm::vec3(0, -0.9, -8.2));
+  koala->SetRotation(glm::vec3(0, 1.5702, 0));
+  koala->SetScale(glm::vec3(0.2f));
+  GetGameObjectRoot()->AddChild(koala);
+
 
 }
 

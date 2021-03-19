@@ -14,7 +14,9 @@ class StrokeModel : public ::monkeysworld::critter::GameObject {
    *  Creates a new StrokeModel.
    */ 
   StrokeModel(::monkeysworld::engine::Context* ctx);
+  void PrepareAttributes() override {}
   void RenderMaterial(const ::monkeysworld::engine::RenderContext& rc) override;
+  void Draw() override {}
 
   /**
    *  Sets the model used to draw the object's stroke onto the screen.

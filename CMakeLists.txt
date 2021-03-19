@@ -11,6 +11,7 @@ add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/game/OctTube.cpp
                                     src/game/Monkey.cpp
                                     src/game/SlidingCamera.cpp
+                                    src/game/StrokeModel.cpp
                                     src/ui/HorizontalMenuGroup.cpp
                                     src/ui/LerpMenu.cpp
                                     

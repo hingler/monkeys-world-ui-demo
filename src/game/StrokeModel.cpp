@@ -12,16 +12,16 @@ void StrokeModel::RenderMaterial(const ::monkeysworld::engine::RenderContext& rc
   mat_.vp_matrix = rc.GetActiveCamera().vp_matrix;
   mat_.UseMaterial();
   mesh_stroke_->PointToVertexAttribs();
-  glDrawElements(GL_TRIANGLES, mesh_stroke_->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+  glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh_stroke_->GetIndexCount()), GL_UNSIGNED_INT, (void*)0);
   glDepthMask(GL_TRUE);
 
   surf_.SetModelTransforms(tf_matrix);
   surf_.SetCameraTransforms(rc.GetActiveCamera().vp_matrix);
   surf_.SetSpotlights(rc.GetSpotlights());
-  surf_.SetSurfaceColor(glm::vec4(glm::vec3(0.7), 1.0));
+  surf_.SetSurfaceColor(glm::vec4(glm::vec3(0.7f), 1.0f));
   surf_.UseMaterial();
   mesh_draw_->PointToVertexAttribs();
-  glDrawElements(GL_TRIANGLES, mesh_draw_->GetIndexCount(), GL_UNSIGNED_INT, (void*)0);
+  glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh_draw_->GetIndexCount()), GL_UNSIGNED_INT, (void*)0);
 }
 
 void StrokeModel::SetStrokeModel(std::shared_ptr<const ::monkeysworld::model::Mesh<>>& mesh) {
@@ -33,7 +33,7 @@ void StrokeModel::SetPrimaryModel(std::shared_ptr<const ::monkeysworld::model::M
 }
 
 void StrokeModel::SetStrokeWidth(float stroke) {
-  mat_.stroke_width = stroke;
+  mat_.stroke_width = stroke / 64.0f;
 }
 
 void StrokeModel::SetColor(glm::vec4 col) {

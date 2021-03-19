@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
 namespace mat {
 
@@ -20,8 +21,11 @@ void StrokeMat::UseMaterial() {
   glUseProgram(prog_.GetProgramDescriptor());
   glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(model_matrix));
   glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(vp_matrix));
-  glUniform1f(2, stroke_width);
-  glUniform4fv(3, 1, glm::value_ptr(color));
+  glm::mat3 norm_mat = glm::inverseTranspose(glm::mat3(model_matrix));
+  glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(norm_mat));
+  glUniform1f(3, stroke_width);
+  glUniform4fv(4, 1, glm::value_ptr(color));
+
 }
 
 }
