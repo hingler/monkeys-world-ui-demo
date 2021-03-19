@@ -19,6 +19,10 @@ struct StrokeMat : public ::monkeysworld::shader::Material {
 
   // width of stroke
   float stroke_width;
+
+  // transformation matrices
+  glm::mat4 vp_matrix;
+  glm::mat4 model_matrix;
  private:
   ::monkeysworld::shader::ShaderProgram prog_;
 };

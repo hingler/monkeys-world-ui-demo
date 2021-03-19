@@ -7,6 +7,7 @@ enable_testing()
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/monkeys-world)
 add_executable(MonkeysWorldDemo     src/scene/SplashScreen.cpp
                                     src/mat/DitheredOctMat.cpp
+                                    src/mat/StrokeMat.cpp
                                     src/game/OctTube.cpp
                                     src/game/Monkey.cpp
                                     src/game/SlidingCamera.cpp
