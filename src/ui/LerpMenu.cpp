@@ -75,8 +75,10 @@ void LerpMenu::UpdateSceneSwap() {
     }
 
     if (confirmed_timer_ >= (CONFIRMED_DURATION + 0.1)) {
-      BOOST_LOG_TRIVIAL(trace) << "preparing to swap...";
-      swap_->Swap();
+      if (swap_->Initialized()) {
+        BOOST_LOG_TRIVIAL(trace) << "preparing to swap...";
+        swap_->Swap();
+      }
     }
   }
 }
