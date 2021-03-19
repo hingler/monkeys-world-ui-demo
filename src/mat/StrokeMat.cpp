@@ -7,10 +7,13 @@
 namespace mat {
 
 StrokeMat::StrokeMat(::monkeysworld::engine::Context* ctx) {
-  prog_ = ::monkeysworld::shader::ShaderProgramBuilder(ctx->GetCachedFileLoader())
-            .WithVertexShader("resources/mat/StrokeMat.vert")
-            .WithFragmentShader("resources/mat/StrokeMat.frag")
-            .Build();
+  ctx->GetExecutor()->ScheduleOnMainThread([&] {
+    prog_ = ::monkeysworld::shader::ShaderProgramBuilder(ctx->GetCachedFileLoader())
+              .WithVertexShader("resources/mat/StrokeMat.vert")
+              .WithFragmentShader("resources/mat/StrokeMat.frag")
+              .Build();
+
+  }).wait();
 }
 
 void StrokeMat::UseMaterial() {
