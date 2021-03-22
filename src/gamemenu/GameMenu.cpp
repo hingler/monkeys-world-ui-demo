@@ -5,6 +5,7 @@
 #include <gamemenu/ui/CourseSelectGroup.hpp>
 #include <gamemenu/ui/StageBanner.hpp>
 #include <gamemenu/ui/StageSelectTransition.hpp>
+#include <gamemenu/ui/DescriptionBG.hpp>
 
 #include <gamemenu/game/ContainerObject.hpp>
 
@@ -24,6 +25,7 @@ using ::monkeysworld::critter::ui::UIGroup;
 using ui::SlidingBlindsTransition;
 using ui::CourseSelectGroup;
 using ui::StageBanner;
+using ui::DescriptionBG;
 using namespace ::monkeysworld::critter::ui::layout;
 using ::monkeysworld::critter::ui::UIImage;
 
@@ -62,7 +64,6 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto margins = transition_screen->GetLayoutParams();
   auto win = GetWindow();
 
-
   margins.top.anchor_id = banner->GetId();
   margins.top.anchor_face = Face::BOTTOM;
   margins.top.margin = 0;
@@ -88,12 +89,29 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   transition_screen->SetLayoutParams(margins);
   bg->SetLayoutParams(margins);
 
+  auto descbg = std::make_shared<DescriptionBG>(ctx);
+  auto desc_margins = descbg->GetLayoutParams();
+  desc_margins.top.anchor_id = win->GetId();
+  desc_margins.bottom.anchor_id = win->GetId();
+  desc_margins.right.anchor_id = win->GetId();
+
+  desc_margins.top.anchor_face = Face::TOP;
+  desc_margins.bottom.anchor_face = Face::BOTTOM;
+  desc_margins.right.anchor_face = Face::RIGHT;
+
+  desc_margins.top.margin = 0;
+  desc_margins.bottom.margin = 0;
+  desc_margins.right.margin = 0;
+
+  descbg->SetLayoutParams(desc_margins);
+  descbg->z_index = 15;
 
   win->AddChild(transition_screen);
   win->AddChild(bg);
   win->AddChild(picks);
   win->AddChild(banner);
   win->AddChild(transition_obj);
+  win->AddChild(descbg);
 
   auto container = std::make_shared<ContainerObject>(ctx);
   container->SetPosition(glm::vec3(0, -0.3, -11.2));
@@ -127,8 +145,8 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   auto model = ctx->GetCachedFileLoader()->LoadModel("resources/gamemenu/koala.obj");
   koala->SetStrokeModel(model);
   koala->SetPrimaryModel(model);
-  koala->SetStrokeWidth(1.3f);
-  koala->SetColor(glm::vec4(0.0, 0.0, 0.0, 1.0));
+  koala->SetStrokeWidth(1.0f);
+  koala->SetColor(glm::vec4(1.0, 1.0, 0.0, 1.0));
 
   koala->SetPosition(glm::vec3(0, -0.9, -8.2));
   koala->SetRotation(glm::vec3(0, 1.5702, 0));
