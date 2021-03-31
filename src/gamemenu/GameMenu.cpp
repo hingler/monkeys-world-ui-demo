@@ -152,9 +152,6 @@ void GameMenu::Initialize(::monkeysworld::engine::Context* ctx) {
   koala->SetRotation(glm::vec3(0, 1.5702, 0));
   koala->SetScale(glm::vec3(0.2f));
   GetGameObjectRoot()->AddChild(koala);
-
-
 }
-
 
 }
